@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
     String TAG = MainActivity.class.getSimpleName();
     JSONArray jsonResult;
     int no_of_recipes;
-
+    BakingRecipeAsynctask ba;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,26 +27,31 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
      * Called when the user taps the "Welcome to Baking Nirvana button button
      */
     public void showBakeRecipes(View view) {
-        BakingRecipeAsynctask ba = new BakingRecipeAsynctask();
+        ba = new BakingRecipeAsynctask();
         ba.delegate = this;
         ba.execute(getString(R.string.json_url));
-        Intent intent = new Intent(this, RecipeListActivity.class);
-        if (jsonResult != null && no_of_recipes > 0) {
-            intent.putExtra("no_of_items", no_of_recipes);
-            startActivity(intent);
-        } else
-            Toast.makeText(this, "No Recipes received ", Toast.LENGTH_LONG).show();
+
     }
 
 
     @Override
     public void processFinish(JSONArray result) {
         jsonResult = result;
-        if (result != null) {
+        Bundle b = new Bundle();
+        b.putString("JArray", jsonResult.toString());
+        if (jsonResult != null) {
             no_of_recipes = result.length();
             Log.i(TAG, "No of json items are " + no_of_recipes);
-        } else
+            Intent intent = new Intent(this, RecipeListActivity.class);
+            intent.putExtra("no_of_items", no_of_recipes);
+            intent.putExtras(b);
+
+            startActivity(intent);
+
+        } else {
             Log.e(TAG, "No Json received");
+            Toast.makeText(this, "No Recipe received ", Toast.LENGTH_LONG).show();
+        }
 
     }
 }

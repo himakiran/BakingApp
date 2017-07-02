@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 /**
  * Created by userhk on 01/07/17.
  * This adapter ties the recycler view (activity_recipe_list.xml ) to recipe images
@@ -16,24 +18,25 @@ import android.widget.TextView;
  * The adpater shall take a json object and retrieve images/thumbnails to show the recipe
  */
 
-public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.RecipeViewHolder> {
+public class RecipeListAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
 
     private static final String TAG = RecipeListAdapter.class.getSimpleName();
-    private int mRecipeItems;
+    private ArrayList<Recipe> recipeArrayList;
+    private Context mContext;
 
 
-    public RecipeListAdapter(int numOfRecipes) {
-        mRecipeItems = numOfRecipes;
+    public RecipeListAdapter(Context context, ArrayList<Recipe> recipes) {
+        mContext = context;
+        recipeArrayList = recipes;
     }
 
     @Override
     public RecipeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
-        int LayoutIdForRecipeListItem = R.layout.activity_recipe_list_item;
-        LayoutInflater inflater = LayoutInflater.from(context);
-        boolean shouldAttachToParentImmediately = false;
 
-        View view = inflater.inflate(LayoutIdForRecipeListItem, parent, shouldAttachToParentImmediately);
+        LayoutInflater inflater = LayoutInflater.from(context);
+
+        View view = inflater.inflate(R.layout.activity_recipe_list_item, parent, false);
         RecipeViewHolder recipeViewHolder = new RecipeViewHolder(view);
 
         return recipeViewHolder;
@@ -42,40 +45,28 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
     @Override
     public void onBindViewHolder(RecipeViewHolder holder, int position) {
         Log.d(TAG, "# " + position);
-        holder.bind(position);
+        Recipe r = recipeArrayList.get(position);
+        ImageView imageView = holder.listRecipeImageView;
+        if (r.getRecipeImg() == "")
+            imageView.setImageResource(R.drawable.welcome);
+        // to implement else where the image url is taken and displayed
+        TextView textView = holder.listRecipeTextView;
+        textView.setText(r.getRecipeName());
 
     }
 
     @Override
     public int getItemCount() {
-        return mRecipeItems;
+        return recipeArrayList.size();
     }
 
-    class RecipeViewHolder extends RecyclerView.ViewHolder {
-
-        ImageView listRecipeImageView;
-        TextView listRecipeTextView;
-
-        public RecipeViewHolder(View recipeView) {
-            super(recipeView);
-
-            listRecipeImageView = (ImageView) recipeView.findViewById(R.id.recipe_item_image);
-            listRecipeTextView = (TextView) recipeView.findViewById(R.id.recipe_item_title);
-        }
-
-        void bind(int listIndex) {
-
-            listRecipeImageView.setImageResource(R.drawable.welcome);
-            // need to replace above with
-            //listRecipeImageView.setImageResource(getImageOfRecipeItem())
-            listRecipeTextView.setText("not yet set");
-            // need to replace above with
-            //listRecipeTextView.setText(getTitleOfRecipeItem())
-
-        }
-
-
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
     }
 
+    private Context getContext() {
+        return mContext;
+    }
 
 }

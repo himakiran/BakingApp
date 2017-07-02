@@ -5,6 +5,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.util.ArrayList;
 
 /**
  * Created by userhk on 01/07/17.
@@ -16,6 +22,9 @@ public class RecipeListActivity extends AppCompatActivity {
     private String TAG = RecipeListActivity.class.getSimpleName();
     private RecipeListAdapter recipeListAdapter;
     private RecyclerView recyclerView;
+    private Bundle b;
+    private JSONArray j;
+    private GetRecipes gr;
 
 
     @Override
@@ -24,6 +33,18 @@ public class RecipeListActivity extends AppCompatActivity {
         //receive the intent from MainActivity and get the no of recipes
         Intent intent = getIntent();
         intent.getIntExtra("no_of_items", num_of_items);
+        Log.d(TAG, "No of Items received : " + num_of_items);
+        // get the recipes list by getting the bundle and extracting the string and converting it
+        // back into JsonArray
+        b = intent.getExtras();
+        try {
+            j = new JSONArray(b.getString("JArray"));
+        } catch (JSONException je) {
+            Log.d(TAG, je.toString());
+        }
+        // use GetRecipes method to get recipes array list
+        gr = new GetRecipes(this, j);
+        ArrayList<Recipe> arrayList = gr.getRecipeArrayList();
         // set the view and attach the adapter to the recycler view
         setContentView(R.layout.activity_recipe_list);
         recyclerView = (RecyclerView) findViewById(R.id.recipes);
@@ -36,7 +57,7 @@ public class RecipeListActivity extends AppCompatActivity {
          */
         recyclerView.setHasFixedSize(true);
 
-        recipeListAdapter = new RecipeListAdapter(num_of_items);
+        recipeListAdapter = new RecipeListAdapter(this, arrayList);
 
         recyclerView.setAdapter(recipeListAdapter);
 
