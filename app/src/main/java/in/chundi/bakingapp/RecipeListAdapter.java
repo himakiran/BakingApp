@@ -2,6 +2,7 @@ package in.chundi.bakingapp;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,9 +48,9 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
     public void onBindViewHolder(RecipeViewHolder holder, int position) {
         //Log.d(TAG, "# " + position);
         r = recipeArrayList.get(position);
-        //Log.d(TAG,r.getRecipeName() + " and Its Image is :" + r.getRecipeImg());
+        Log.d(TAG, r.getRecipeName() + " and Its Image is :" + r.getRecipeImg());
         ImageView imageView = holder.listRecipeImageView;
-        if (r.getRecipeImg() == "")
+        if (r.getRecipeImg().equals(""))
             imageView.setImageResource(R.drawable.welcome);
         // to implement else where the image url is taken and displayed
         TextView textView = holder.listRecipeTextView;

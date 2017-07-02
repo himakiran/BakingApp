@@ -3,7 +3,7 @@ package in.chundi.bakingapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
@@ -52,8 +52,8 @@ public class RecipeListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recipe_list);
         recyclerView = (RecyclerView) findViewById(recipes);
         // Here we r displaying the recycler view in a 2 column grid
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
-        recyclerView.setLayoutManager(gridLayoutManager);
+        LinearLayoutManager LLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(LLayoutManager);
         /*
             * Use this setting to improve performance if you know that changes in content do not
             * change the child layout size in the RecyclerView
