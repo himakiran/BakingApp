@@ -19,21 +19,32 @@ public class GetRecipes {
     private Context context;
     private ArrayList<Recipe> recipeArrayList;
     private String TAG = GetRecipes.class.getSimpleName();
+    private Recipe r;
 
     public GetRecipes(Context mcontext, JSONArray jsonArray) {
         context = mcontext;
         ja = jsonArray;
-
+        /*
+        Checking that we are getting the correct Json objects from the JSONArray
+         */
+//        for(int i=0;i<ja.length();i++){
+//            try {
+//                Log.d(TAG, ja.get(i).toString());
+//            } catch(JSONException JE){
+//                Log.d(TAG,JE.toString());
+//            }
+//        }
     }
 
     public ArrayList<Recipe> getRecipeArrayList() {
         int num = ja.length();
-        Recipe r = new Recipe(context);
+
         recipeArrayList = new ArrayList<Recipe>(num);
         JSONObject j;
         try {
             for (int i = 0; i < num; i++) {
                 j = ja.getJSONObject(i);
+                r = new Recipe(context);
                 r.setRecipeId(j.getInt("id"));
                 r.setRecipeName(j.getString("name"));
                 r.setRecipeIngredients(j.getJSONArray("ingredients"));
@@ -41,6 +52,7 @@ public class GetRecipes {
                 r.setRecipeSteps(j.getJSONArray("steps"));
                 r.setRecipeImg(j.getString("image"));
                 recipeArrayList.add(i, r);
+                r = null;
             }
         } catch (JSONException je) {
             Log.d(TAG, je.toString());

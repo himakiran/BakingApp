@@ -12,6 +12,8 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
+import static in.chundi.bakingapp.R.id.recipes;
+
 /**
  * Created by userhk on 01/07/17.
  */
@@ -32,7 +34,7 @@ public class RecipeListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //receive the intent from MainActivity and get the no of recipes
         Intent intent = getIntent();
-        intent.getIntExtra("no_of_items", num_of_items);
+        num_of_items = intent.getIntExtra("no_of_items", 0);
         Log.d(TAG, "No of Items received : " + num_of_items);
         // get the recipes list by getting the bundle and extracting the string and converting it
         // back into JsonArray
@@ -45,9 +47,10 @@ public class RecipeListActivity extends AppCompatActivity {
         // use GetRecipes method to get recipes array list
         gr = new GetRecipes(this, j);
         ArrayList<Recipe> arrayList = gr.getRecipeArrayList();
+
         // set the view and attach the adapter to the recycler view
         setContentView(R.layout.activity_recipe_list);
-        recyclerView = (RecyclerView) findViewById(R.id.recipes);
+        recyclerView = (RecyclerView) findViewById(recipes);
         // Here we r displaying the recycler view in a 2 column grid
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(gridLayoutManager);

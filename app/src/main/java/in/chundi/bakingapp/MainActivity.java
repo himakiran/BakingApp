@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
         Bundle b = new Bundle();
         b.putString("JArray", jsonResult.toString());
         if (jsonResult != null) {
-            no_of_recipes = result.length();
+            no_of_recipes = jsonResult.length();
             Log.i(TAG, "No of json items are " + no_of_recipes);
             Intent intent = new Intent(this, RecipeListActivity.class);
             intent.putExtra("no_of_items", no_of_recipes);

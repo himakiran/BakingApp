@@ -2,7 +2,6 @@ package in.chundi.bakingapp;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,11 +22,13 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
     private static final String TAG = RecipeListAdapter.class.getSimpleName();
     private ArrayList<Recipe> recipeArrayList;
     private Context mContext;
+    private Recipe r;
 
 
     public RecipeListAdapter(Context context, ArrayList<Recipe> recipes) {
         mContext = context;
         recipeArrayList = recipes;
+
     }
 
     @Override
@@ -44,8 +45,9 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
 
     @Override
     public void onBindViewHolder(RecipeViewHolder holder, int position) {
-        Log.d(TAG, "# " + position);
-        Recipe r = recipeArrayList.get(position);
+        //Log.d(TAG, "# " + position);
+        r = recipeArrayList.get(position);
+        //Log.d(TAG,r.getRecipeName() + " and Its Image is :" + r.getRecipeImg());
         ImageView imageView = holder.listRecipeImageView;
         if (r.getRecipeImg() == "")
             imageView.setImageResource(R.drawable.welcome);
