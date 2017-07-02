@@ -47,8 +47,8 @@ public class RecipeListFragment extends Fragment {
         // use GetRecipes method to get recipes array list
         gr = new GetRecipes(this.getContext(), j);
         ArrayList<Recipe> arrayList = gr.getRecipeArrayList();
-        // rename activity_recipe_list as fragment_recipe_list later
-        final View rootView = inflater.inflate(R.layout.activity_recipe_list, container, false);
+
+        final View rootView = inflater.inflate(R.layout.fragment_recipe_list, container, false);
 
         // Get a reference to the GridView in the fragment_recipe_list xml layout file
         recyclerView = (RecyclerView) rootView.findViewById(recipes);

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 /**
  * Created by userhk on 01/07/17.
- * This adapter ties the recycler view (activity_recipe_list.xml ) to recipe images
+ * This adapter ties the recycler view (fragment_recipe_list.xml ) to recipe images
  * each of which will fill up the image view in activity_recipe_list_item.xml to the adapter
  * The adpater shall take a json object and retrieve images/thumbnails to show the recipe
  */
