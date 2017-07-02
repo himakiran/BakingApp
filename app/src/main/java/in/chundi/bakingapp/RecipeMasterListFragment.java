@@ -22,14 +22,14 @@ import static in.chundi.bakingapp.R.id.recipes;
  * Created by userhk on 02/07/17.
  */
 
-public class RecipeListFragment extends Fragment {
+public class RecipeMasterListFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private JSONArray j;
     private Bundle bundle;
     private GetRecipes gr;
 
-    public RecipeListFragment() {
+    public RecipeMasterListFragment() {
 
     }
 
@@ -48,9 +48,9 @@ public class RecipeListFragment extends Fragment {
         gr = new GetRecipes(this.getContext(), j);
         ArrayList<Recipe> arrayList = gr.getRecipeArrayList();
 
-        final View rootView = inflater.inflate(R.layout.fragment_recipe_list, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_recipe_master_list, container, false);
 
-        // Get a reference to the GridView in the fragment_recipe_list xml layout file
+        // Get a reference to the GridView in the fragment_recipe_master_list xml layout file
         recyclerView = (RecyclerView) rootView.findViewById(recipes);
 
         // Create the adapter
@@ -66,6 +66,10 @@ public class RecipeListFragment extends Fragment {
 
 
         recyclerView.setAdapter(rAdapter);
+
+        // Now we shall set a onClickListener on the imageview as well as textView so that when a user
+        // clicks on a recipe image or text the RecipeDetailFragment is launched
+
 
         // Return the root view
         return rootView;

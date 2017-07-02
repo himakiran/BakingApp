@@ -13,8 +13,8 @@ import java.util.ArrayList;
 
 /**
  * Created by userhk on 01/07/17.
- * This adapter ties the recycler view (fragment_recipe_list.xml ) to recipe images
- * each of which will fill up the image view in activity_recipe_list_item.xml to the adapter
+ * This adapter ties the recycler view (fragment_recipe_master_list.xml ) to recipe images
+ * each of which will fill up the image view in fragment_recipe_master_list_item.xml to the adapter
  * The adpater shall take a json object and retrieve images/thumbnails to show the recipe
  */
 
@@ -38,7 +38,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
 
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View view = inflater.inflate(R.layout.activity_recipe_list_item, parent, false);
+        View view = inflater.inflate(R.layout.fragment_recipe_master_list_item, parent, false);
         RecipeViewHolder recipeViewHolder = new RecipeViewHolder(view);
 
         return recipeViewHolder;

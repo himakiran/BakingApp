@@ -50,8 +50,8 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
 //            startActivity(intent);
 
             // create and display RecipeListFragment
-            setContentView(R.layout.fragment_recipe_list);
-            RecipeListFragment recipeListFragment = new RecipeListFragment();
+            setContentView(R.layout.fragment_recipe_master_list);
+            RecipeMasterListFragment recipeListFragment = new RecipeMasterListFragment();
             recipeListFragment.setArguments(b);
             FragmentManager fragmentManager = getSupportFragmentManager();
 
