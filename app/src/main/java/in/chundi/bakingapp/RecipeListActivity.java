@@ -51,7 +51,7 @@ public class RecipeListActivity extends AppCompatActivity {
         // set the view and attach the adapter to the recycler view
         setContentView(R.layout.activity_recipe_list);
         recyclerView = (RecyclerView) findViewById(recipes);
-        // Here we r displaying the recycler view in a 2 column grid
+        // Here we r displaying the recycler view in a linear layout fashion
         LinearLayoutManager LLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(LLayoutManager);
         /*
