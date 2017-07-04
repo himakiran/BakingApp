@@ -59,30 +59,33 @@ public class RecipeDetailListFragment extends Fragment {
             // Get a reference to all the views in the rootView
             textView = (TextView) rootView.findViewById(recipe_title);
             textView.setText(j.getString("name"));
-            Log.d(TAG, textView.getText().toString());
+            //Log.d(TAG, textView.getText().toString());
             Button b = (Button) rootView.findViewById(recipe_steps);
             b.setText("Steps to Make " + j.getString("name"));
-            Log.d(TAG, b.getText().toString());
+            //Log.d(TAG, b.getText().toString());
             textView = (TextView) rootView.findViewById(recipe_servings);
             textView.setText("No of Servings : " + j.getString("servings"));
-            Log.d(TAG, textView.getText().toString());
+            //Log.d(TAG, textView.getText().toString());
 
             // Get the content of listDataHeader and listDatachild from the json object
             JSONArray ingredientsJsonArray = j.getJSONArray("ingredients");
+            Log.d(TAG, ingredientsJsonArray.toString());
             JSONObject temp;
             listDataHeader = new ArrayList<String>();
-            childList = new ArrayList<String>();
+
             listDataChild = new HashMap<String, List<String>>();
 
             for (int i = 0; i < ingredientsJsonArray.length(); i++) {
-                listDataHeader.add(i, "Name  :  " + ingredientsJsonArray.getJSONObject(i).getString("ingredient"));
+                childList = new ArrayList<String>();
+                listDataHeader.add(i, ingredientsJsonArray.getJSONObject(i).getString("ingredient"));
                 // assuming that ingredient object always will have three values namely quantity,
                 // measure and ingredient
                 temp = ingredientsJsonArray.getJSONObject(i);
                 childList.add(0, "Quantity : " + temp.getString("quantity"));
                 childList.add(1, "Measure  : " + temp.getString("measure"));
-
+                Log.d(TAG, childList.toString());
                 listDataChild.put(ingredientsJsonArray.getJSONObject(i).getString("ingredient"), childList);
+                childList = null;
             }
             expListView = (ExpandableListView) rootView.findViewById(recipe_ingredients_list);
             listAdapter = new ExpandableIngredientListAdapter(getContext(), listDataHeader, listDataChild);

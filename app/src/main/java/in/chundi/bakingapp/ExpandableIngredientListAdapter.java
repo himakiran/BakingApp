@@ -2,6 +2,7 @@ package in.chundi.bakingapp;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import java.util.HashMap;
 import java.util.List;
+
 
 /**
  * Created by userhk on 03/07/17.
@@ -21,6 +23,7 @@ public class ExpandableIngredientListAdapter extends BaseExpandableListAdapter {
     private List<String> listIngredientHeader; // header titles
     // child data in format of header title, child title
     private HashMap<String, List<String>> listIngredientChild;
+    private String TAG = ExpandableIngredientListAdapter.class.getSimpleName();
 
     public ExpandableIngredientListAdapter(Context context, List<String> listDataHeader,
                                            HashMap<String, List<String>> listChildData) {
@@ -29,12 +32,16 @@ public class ExpandableIngredientListAdapter extends BaseExpandableListAdapter {
         this.mContext = context;
         this.listIngredientHeader = listDataHeader;
         this.listIngredientChild = listChildData;
+        Log.d(TAG, listChildData.toString());
     }
 
     @Override
     public Object getChild(int groupPosition, int childPosititon) {
+        Log.d(TAG, "Child returned is " + this.listIngredientChild.get(this.listIngredientHeader.get(groupPosition))
+                .get(childPosititon).toString());
         return this.listIngredientChild.get(this.listIngredientHeader.get(groupPosition))
                 .get(childPosititon);
+
     }
 
     @Override
@@ -47,7 +54,7 @@ public class ExpandableIngredientListAdapter extends BaseExpandableListAdapter {
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
         final String childText = (String) getChild(groupPosition, childPosition);
-
+        Log.d(TAG, "text of child at grp posn " + groupPosition + " and child posn : " + childPosition + childText);
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -63,8 +70,11 @@ public class ExpandableIngredientListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
+        Log.d(TAG, ("No of Children  Of " + this.listIngredientHeader.get(groupPosition) + " : " + this.listIngredientChild.size()));
+        //return this.listIngredientChild.size();//.get(this.listIngredientHeader.get(groupPosition))
         return this.listIngredientChild.get(this.listIngredientHeader.get(groupPosition))
                 .size();
+
     }
 
     @Override
