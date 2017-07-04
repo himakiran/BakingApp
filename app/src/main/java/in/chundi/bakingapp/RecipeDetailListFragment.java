@@ -2,6 +2,7 @@ package in.chundi.bakingapp;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,7 +49,10 @@ public class RecipeDetailListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+
         bundle = getArguments();
+
+
         String jsonString = bundle.getString("jsonObject");
 
         final View rootView = inflater.inflate(R.layout.fragment_recipe_detail_list_item, container, false);
@@ -62,6 +66,26 @@ public class RecipeDetailListFragment extends Fragment {
             //Log.d(TAG, textView.getText().toString());
             Button b = (Button) rootView.findViewById(recipe_steps);
             b.setText("Steps to Make " + j.getString("name"));
+            b.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    try {
+                        JSONArray jsonArray = j.getJSONArray("steps");
+
+                        Bundle bundle = new Bundle();
+                        bundle.putString("jsonStepsArray", jsonArray.toString());
+                        getActivity().setContentView(R.layout.fragment_recipe_steps_list);
+                        RecipeStepsListFragment recipeStepsListFragment = new RecipeStepsListFragment();
+                        recipeStepsListFragment.setArguments(bundle);
+                        FragmentManager fg = getActivity().getSupportFragmentManager();
+                        fg.beginTransaction()
+                                .add(R.id.recipe_steps_container, recipeStepsListFragment)
+                                .commit();
+
+                    } catch (JSONException je) {
+                        Log.d(TAG, je.toString());
+                    }
+                }
+            });
             //Log.d(TAG, b.getText().toString());
             textView = (TextView) rootView.findViewById(recipe_servings);
             textView.setText("No of Servings : " + j.getString("servings"));
@@ -69,7 +93,7 @@ public class RecipeDetailListFragment extends Fragment {
 
             // Get the content of listDataHeader and listDatachild from the json object
             JSONArray ingredientsJsonArray = j.getJSONArray("ingredients");
-            Log.d(TAG, ingredientsJsonArray.toString());
+            //Log.d(TAG, ingredientsJsonArray.toString());
             JSONObject temp;
             listDataHeader = new ArrayList<String>();
 
@@ -81,9 +105,11 @@ public class RecipeDetailListFragment extends Fragment {
                 // assuming that ingredient object always will have three values namely quantity,
                 // measure and ingredient
                 temp = ingredientsJsonArray.getJSONObject(i);
+
                 childList.add(0, "Quantity : " + temp.getString("quantity"));
                 childList.add(1, "Measure  : " + temp.getString("measure"));
-                Log.d(TAG, childList.toString());
+
+                //Log.d(TAG, childList.toString());
                 listDataChild.put(ingredientsJsonArray.getJSONObject(i).getString("ingredient"), childList);
                 childList = null;
             }
@@ -91,16 +117,14 @@ public class RecipeDetailListFragment extends Fragment {
             listAdapter = new ExpandableIngredientListAdapter(getContext(), listDataHeader, listDataChild);
             expListView.setAdapter(listAdapter);
 
-
-
-
-
-
         } catch (JSONException je) {
             Log.d(TAG, je.toString());
         }
 
         // Return the root view
         return rootView;
+
     }
+
+
 }

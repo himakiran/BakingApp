@@ -2,11 +2,15 @@ package in.chundi.bakingapp;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
+
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,28 +21,30 @@ import java.util.List;
  * Used code from : http://www.androidhive.info/2013/07/android-expandable-list-view-tutorial/
  */
 
-public class ExpandableIngredientListAdapter extends BaseExpandableListAdapter {
+public class ExpandableStepsAdapter extends BaseExpandableListAdapter {
     private Context mContext;
-    private List<String> listIngredientHeader; // header titles
+    private SimpleExoPlayer mExoPlayer;
+    private SimpleExoPlayerView mPlayerView;
+    private List<String> listStepsHeader; // header titles
     // child data in format of header title, child title
-    private HashMap<String, List<String>> listIngredientChild;
-    private String TAG = ExpandableIngredientListAdapter.class.getSimpleName();
+    private HashMap<String, List<String>> listStepsChild;
+    private String TAG = ExpandableStepsAdapter.class.getSimpleName();
 
-    public ExpandableIngredientListAdapter(Context context, List<String> listDataHeader,
-                                           HashMap<String, List<String>> listChildData) {
+    public ExpandableStepsAdapter(Context context, List<String> listDataHeader,
+                                  HashMap<String, List<String>> listChildData) {
 
 
         this.mContext = context;
-        this.listIngredientHeader = listDataHeader;
-        this.listIngredientChild = listChildData;
-        //Log.d(TAG, listChildData.toString());
+        this.listStepsHeader = listDataHeader;
+        this.listStepsChild = listChildData;
+        Log.d(TAG, listChildData.toString());
     }
 
     @Override
     public Object getChild(int groupPosition, int childPosititon) {
-        // Log.d(TAG, "Child returned is " + this.listIngredientChild.get(this.listIngredientHeader.get(groupPosition))
-        //   .get(childPosititon).toString());
-        return this.listIngredientChild.get(this.listIngredientHeader.get(groupPosition))
+        Log.d(TAG, "Child returned is " + this.listStepsChild.get(this.listStepsHeader.get(groupPosition))
+                .get(childPosititon).toString());
+        return this.listStepsChild.get(this.listStepsHeader.get(groupPosition))
                 .get(childPosititon);
 
     }
@@ -53,37 +59,42 @@ public class ExpandableIngredientListAdapter extends BaseExpandableListAdapter {
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
         final String childText = (String) getChild(groupPosition, childPosition);
-        // Log.d(TAG, "text of child at grp posn " + groupPosition + " and child posn : " + childPosition + childText);
+        Log.d(TAG, "text of child at grp posn " + groupPosition + " and child posn : " + childPosition + childText);
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.fragment_recipe_detail_ingredients_list_child_items, null);
+            convertView = infalInflater.inflate(R.layout.fragment_recipe_steps_list_child_items, null);
         }
 
         TextView txtListChild = (TextView) convertView
-                .findViewById(R.id.lblListItem);
+                .findViewById(R.id.StepsListLongDesc);
 
         txtListChild.setText(childText);
+
+//        // Initialize the player view.
+//        mPlayerView = (SimpleExoPlayerView) convertView.findViewById(R.id.playerView);
+//        // Load the thumbnail as the background image
+//        mPlayerView.setDefaultArtwork();
         return convertView;
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        // Log.d(TAG, ("No of Children  Of " + this.listIngredientHeader.get(groupPosition) + " : " + this.listIngredientChild.size()));
+        Log.d(TAG, ("No of Children  Of " + this.listStepsHeader.get(groupPosition) + " : " + this.listStepsChild.size()));
         //return this.listIngredientChild.size();//.get(this.listIngredientHeader.get(groupPosition))
-        return this.listIngredientChild.get(this.listIngredientHeader.get(groupPosition))
+        return this.listStepsChild.get(this.listStepsHeader.get(groupPosition))
                 .size();
 
     }
 
     @Override
     public Object getGroup(int groupPosition) {
-        return this.listIngredientHeader.get(groupPosition);
+        return this.listStepsHeader.get(groupPosition);
     }
 
     @Override
     public int getGroupCount() {
-        return this.listIngredientHeader.size();
+        return this.listStepsHeader.size();
     }
 
     @Override
