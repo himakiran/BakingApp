@@ -8,11 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 /**
  * Created by userhk on 01/07/17.
+ * Code used and modified from https://guides.codepath.com/android/using-the-recyclerview
  * This adapter ties the recycler view (fragment_recipe_master_list.xml ) to recipe images
  * each of which will fill up the image view in fragment_recipe_master_list_item.xml to the adapter
  * The adpater shall take a json object and retrieve images/thumbnails to show the recipe
@@ -70,6 +72,32 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
 
     private Context getContext() {
         return mContext;
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        public ImageView imgName;
+        public TextView textTitle;
+        private Context context;
+
+        public ViewHolder(Context context, View itemView) {
+            super(itemView);
+            this.imgName = (ImageView) itemView.findViewById(R.id.recipe_item_image);
+            this.textTitle = (TextView) itemView.findViewById(R.id.recipe_item_title);
+            // Store the context
+            this.context = context;
+            // Attach a click listener to the entire row view
+            itemView.setOnClickListener(this);
+        }
+
+        // Handles the row being being clicked
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition(); // gets item position
+            if (position != RecyclerView.NO_POSITION) {
+
+                Toast.makeText(context, "Recipe not availabe", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
 }

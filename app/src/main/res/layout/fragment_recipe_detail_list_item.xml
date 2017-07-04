@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/recipe_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+
+    <TextView
+        android:id="@+id/recipe_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:text="RECIPE NAME"
+        android:textAlignment="center"
+        android:textSize="36sp" />
+
+    <ExpandableListView
+        android:id="@+id/recipe_ingredients_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:text="RECIPE INGREDIENTS"
+        android:textAlignment="center"
+        android:textSize="36sp" />
+
+    <Button
+        android:id="@+id/recipe_steps"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:text="RECIPE STEPS"
+        android:textAlignment="center"
+        android:textSize="36sp">
+
+    </Button>
+
+    <TextView
+        android:id="@+id/recipe_servings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:text="NO OF SERVINGS"
+        android:textAlignment="center"
+        android:textSize="36sp" />
+
+</LinearLayout>

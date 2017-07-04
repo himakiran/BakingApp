@@ -1,7 +1,9 @@
 package in.chundi.bakingapp;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,6 +13,7 @@ import android.view.ViewGroup;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -20,6 +23,7 @@ import static in.chundi.bakingapp.R.id.recipes;
 
 /**
  * Created by userhk on 02/07/17.
+ * code used and modified from https://guides.codepath.com/android/using-the-recyclerview
  */
 
 public class RecipeMasterListFragment extends Fragment {
@@ -28,8 +32,10 @@ public class RecipeMasterListFragment extends Fragment {
     private JSONArray j;
     private Bundle bundle;
     private GetRecipes gr;
+    private Context mContext;
 
     public RecipeMasterListFragment() {
+
 
     }
 
@@ -67,8 +73,55 @@ public class RecipeMasterListFragment extends Fragment {
 
         recyclerView.setAdapter(rAdapter);
 
-        // Now we shall set a onClickListener on the imageview as well as textView so that when a user
-        // clicks on a recipe image or text the RecipeDetailFragment is launched
+        ItemClickSupport.addTo(recyclerView).setOnItemClickListener(
+                new ItemClickSupport.OnItemClickListener() {
+                    @Override
+                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                        try {
+                            Log.d(TAG, "POSITION  IS " + position);
+                            JSONObject jsonObject = j.getJSONObject(position);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("jsonObject", jsonObject.toString());
+                            getActivity().setContentView(R.layout.fragment_recipe_detail_list_item);
+                            RecipeDetailListFragment recipeDetailListFragment = new RecipeDetailListFragment();
+                            recipeDetailListFragment.setArguments(bundle);
+                            FragmentManager fg = getActivity().getSupportFragmentManager();
+                            fg.beginTransaction()
+                                    .add(R.id.recipe_container, recipeDetailListFragment)
+                                    .commit();
+
+                        } catch (JSONException je) {
+                            Log.d(TAG, je.toString());
+                        }
+
+                    }
+                }
+        );
+
+//        // Now we shall set a onClickListener on the imageview as well as textView so that when a user
+//        // clicks on a recipe image or text the RecipeDetailFragment is launched
+//        final ImageView imageView = (ImageView) recyclerView.findViewById(R.id.recipe_item_image);
+//
+//        imageView.setOnClickListener(new View.OnClickListener() {
+//               @Override
+//                public void onClick(View view) {
+//                   try {
+//                       JSONObject jsonObject = j.getJSONObject(imageView.getId());
+//                       Bundle bundle = new Bundle();
+//                       bundle.putString("jsonObject",jsonObject.toString());
+//
+//                       RecipeDetailListFragment recipeDetailListFragment = new RecipeDetailListFragment();
+//                       recipeDetailListFragment.setArguments(bundle);
+//                       FragmentManager fg = getActivity().getSupportFragmentManager();
+//                        fg.beginTransaction()
+//                               .add(R.id.recipe_container, recipeDetailListFragment)
+//                               .commit();
+//
+//                   } catch (JSONException je){
+//                       Log.d(TAG,je.toString());
+//                   }
+//                }
+//            });
 
 
         // Return the root view
