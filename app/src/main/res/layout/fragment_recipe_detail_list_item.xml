@@ -16,14 +16,7 @@
         android:textAlignment="center"
         android:textSize="36sp" />
 
-    <ExpandableListView
-        android:id="@+id/recipe_ingredients_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorAccent"
-        android:text="RECIPE INGREDIENTS"
-        android:textAlignment="center"
-        android:textSize="36sp" />
+
 
     <Button
         android:id="@+id/recipe_steps"
@@ -42,6 +35,25 @@
         android:layout_height="wrap_content"
         android:background="@color/colorAccent"
         android:text="NO OF SERVINGS"
+        android:textAlignment="center"
+        android:textSize="36sp" />
+
+    <TextView
+        android:id="@+id/recipe_ingredients"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:text="INGREDIENTS"
+        android:textAlignment="center"
+        android:textSize="36sp" />
+
+    <ExpandableListView
+        android:id="@+id/recipe_ingredients_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:padding="8dp"
+        android:text="RECIPE INGREDIENTS"
         android:textAlignment="center"
         android:textSize="36sp" />
 
