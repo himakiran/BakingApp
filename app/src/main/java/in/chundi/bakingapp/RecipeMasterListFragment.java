@@ -82,7 +82,7 @@ public class RecipeMasterListFragment extends Fragment {
                             JSONObject jsonObject = j.getJSONObject(position);
                             Bundle bundle = new Bundle();
                             bundle.putString("jsonObject", jsonObject.toString());
-                            getActivity().setContentView(R.layout.fragment_recipe_detail_list_item);
+                            getActivity().setContentView(R.layout.fragment_recipe_detail_list);
                             RecipeDetailListFragment recipeDetailListFragment = new RecipeDetailListFragment();
                             recipeDetailListFragment.setArguments(bundle);
                             FragmentManager fg = getActivity().getSupportFragmentManager();
