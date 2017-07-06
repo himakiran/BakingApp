@@ -120,7 +120,7 @@ public class RecipeDetailListFragment extends Fragment {
         } catch (JSONException je) {
             Log.d(TAG, je.toString());
         }
-
+        Log.d(TAG, getActivity().toString());
         // Return the root view
         return rootView;
 

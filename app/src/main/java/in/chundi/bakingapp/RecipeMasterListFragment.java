@@ -1,6 +1,5 @@
 package in.chundi.bakingapp;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -17,7 +16,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import static android.content.ContentValues.TAG;
 import static in.chundi.bakingapp.R.id.recipes;
 
 
@@ -28,11 +26,12 @@ import static in.chundi.bakingapp.R.id.recipes;
 
 public class RecipeMasterListFragment extends Fragment {
 
+    public String TAG = RecipeMasterListFragment.class.getSimpleName();
+    LinearLayoutManager LLayoutManager;
     private RecyclerView recyclerView;
     private JSONArray j;
     private Bundle bundle;
     private GetRecipes gr;
-    private Context mContext;
 
     public RecipeMasterListFragment() {
 
@@ -44,7 +43,9 @@ public class RecipeMasterListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+
         bundle = getArguments();
+
         try {
             j = new JSONArray(bundle.getString("JArray"));
         } catch (JSONException je) {
@@ -64,7 +65,7 @@ public class RecipeMasterListFragment extends Fragment {
 
 
         // Here we r displaying the recycler view in a linear layout fashion
-        LinearLayoutManager LLayoutManager = new LinearLayoutManager(this.getContext());
+        LLayoutManager = new LinearLayoutManager(this.getContext());
         recyclerView.setLayoutManager(LLayoutManager);
         recyclerView.setHasFixedSize(true);
 
@@ -96,11 +97,15 @@ public class RecipeMasterListFragment extends Fragment {
 
                     }
                 }
+
         );
 
+        Log.d(TAG, getActivity().toString());
 
 
         // Return the root view
         return rootView;
+
+
     }
 }
