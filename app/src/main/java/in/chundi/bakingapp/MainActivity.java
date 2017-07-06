@@ -1,6 +1,9 @@
 package in.chundi.bakingapp;
 
+import android.content.Context;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -39,7 +42,17 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
     public void showBakeRecipes(View view) {
         ba = new BakingRecipeAsynctask();
         ba.delegate = this;
-        ba.execute(getString(R.string.json_url));
+        ConnectivityManager cm =
+                (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        if (isConnected) {
+            ba.execute(getString(R.string.json_url));
+        } else {
+            Toast t = new Toast(this);
+            t.makeText(this, "No Internet Connection Detected", Toast.LENGTH_LONG).show();
+        }
 
     }
 
