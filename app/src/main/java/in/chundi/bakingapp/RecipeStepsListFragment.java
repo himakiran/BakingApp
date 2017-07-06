@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
-import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,11 +22,10 @@ import java.util.List;
  */
 
 public class RecipeStepsListFragment extends Fragment {
-    TextView textView;
+
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
     List<String> listDataHeader;
-    List<String> childList;
     HashMap<String, List<String>> listDataChild;
     private Bundle bundle;
     private JSONArray j;
@@ -37,7 +35,7 @@ public class RecipeStepsListFragment extends Fragment {
 
     }
 
-    // Inflates the details layout of all Recipe images
+    // Inflates the details layout of all Recipe steps
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -70,7 +68,9 @@ public class RecipeStepsListFragment extends Fragment {
             }
 
             expListView = (ExpandableListView) rootView.findViewById(R.id.recipe_steps_list);
-            listAdapter = new ExpandableIngredientListAdapter(getContext(), listDataHeader, listDataChild);
+            listAdapter = new ExpandableStepsAdapter(getContext(), listDataHeader, listDataChild);
+            //Log.d(TAG,"LISTDATAHEADER :: " +listDataHeader.toString());
+            //Log.d(TAG,"LISTDATACHILD :: " +listDataChild.toString());
             expListView.setAdapter(listAdapter);
 
         } catch (JSONException je) {

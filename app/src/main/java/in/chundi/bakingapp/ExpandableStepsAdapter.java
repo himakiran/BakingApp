@@ -2,6 +2,7 @@ package in.chundi.bakingapp;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +10,20 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -37,15 +49,15 @@ public class ExpandableStepsAdapter extends BaseExpandableListAdapter {
         this.mContext = context;
         this.listStepsHeader = listDataHeader;
         this.listStepsChild = listChildData;
-        Log.d(TAG, listChildData.toString());
+        //Log.d(TAG, listChildData.toString());
     }
 
     @Override
     public Object getChild(int groupPosition, int childPosititon) {
-        Log.d(TAG, "Child returned is " + this.listStepsChild.get(this.listStepsHeader.get(groupPosition))
-                .get(childPosititon).toString());
-        return this.listStepsChild.get(this.listStepsHeader.get(groupPosition))
-                .get(childPosititon);
+        //Log.d(TAG, "Child returned is " + this.listStepsChild.get(this.listStepsHeader.get(groupPosition)));
+        //.get(childPosititon).toString());
+        return this.listStepsChild.get(this.listStepsHeader.get(groupPosition));
+        // .get(childPosititon);
 
     }
 
@@ -58,34 +70,77 @@ public class ExpandableStepsAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
-        final String childText = (String) getChild(groupPosition, childPosition);
-        Log.d(TAG, "text of child at grp posn " + groupPosition + " and child posn : " + childPosition + childText);
+        final ArrayList<String> childText = (ArrayList<String>) getChild(groupPosition, childPosition);
+        Log.d(TAG, "CHILDTEXT : " + childText.toString());
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.fragment_recipe_steps_list_child_items, null);
         }
 
+        GetDescVidThumbnailFromSteps gd = new GetDescVidThumbnailFromSteps(childText);
+
         TextView txtListChild = (TextView) convertView
                 .findViewById(R.id.StepsListLongDesc);
 
-        txtListChild.setText(childText);
+        txtListChild.setText(gd.getLongDesc());
+        Log.d(TAG, gd.getLongDesc());
 
-//        // Initialize the player view.
-//        mPlayerView = (SimpleExoPlayerView) convertView.findViewById(R.id.playerView);
-//        // Load the thumbnail as the background image
-//        mPlayerView.setDefaultArtwork();
+        final String urlText = gd.getVideoUrl();
+
+        // Initialize the player view.
+        mPlayerView = (SimpleExoPlayerView) convertView.findViewById(R.id.playerView);
+
+        //Picasso.with(mContext).load(R.drawable.bakingthumb).into(imageView);
+
+        Log.d(TAG, "URI IS : " + Uri.parse(urlText).toString());
+        initializePlayer(Uri.parse(urlText));
+
+
         return convertView;
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        Log.d(TAG, ("No of Children  Of " + this.listStepsHeader.get(groupPosition) + " : " + this.listStepsChild.size()));
+        //Log.d(TAG, ("No of Children  Of " + this.listStepsHeader.get(groupPosition) + " : " + this.listStepsChild.size()));
         //return this.listIngredientChild.size();//.get(this.listIngredientHeader.get(groupPosition))
         return this.listStepsChild.get(this.listStepsHeader.get(groupPosition))
                 .size();
 
     }
+
+    /**
+     * +     * Initialize ExoPlayer.
+     * +     * @param mediaUri The URI of the sample to play.
+     * +
+     */
+    private void initializePlayer(Uri mediaUri) {
+        if (mExoPlayer == null) {
+            // Create an instance of the ExoPlayer.
+            TrackSelector trackSelector = new DefaultTrackSelector();
+            LoadControl loadControl = new DefaultLoadControl();
+            mExoPlayer = ExoPlayerFactory.newSimpleInstance(mContext, trackSelector, loadControl);
+            mPlayerView.setPlayer(mExoPlayer);
+            // Prepare the MediaSource.
+            String userAgent = Util.getUserAgent(mContext, "bakingApp");
+            MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(mContext, userAgent), new DefaultExtractorsFactory(), null, null);
+            mExoPlayer.prepare(mediaSource);
+            mExoPlayer.setPlayWhenReady(true);
+        }
+    }
+
+    /**
+     * +     * Release ExoPlayer.
+     * +
+     */
+    private void releasePlayer() {
+        mExoPlayer.stop();
+        mExoPlayer.release();
+        mExoPlayer = null;
+    }
+
+
+
 
     @Override
     public Object getGroup(int groupPosition) {
@@ -106,6 +161,7 @@ public class ExpandableStepsAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
         String headerTitle = (String) getGroup(groupPosition);
+        Log.d(TAG, headerTitle);
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);

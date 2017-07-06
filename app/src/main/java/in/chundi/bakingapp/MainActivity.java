@@ -43,12 +43,6 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
         if (jsonResult != null) {
             no_of_recipes = jsonResult.length();
             Log.i(TAG, "No of json items are " + no_of_recipes);
-//            Intent intent = new Intent(this, RecipeListActivity.class);
-//            intent.putExtra("no_of_items", no_of_recipes);
-//            intent.putExtras(b);
-//
-//            startActivity(intent);
-
             // create and display RecipeListFragment
             setContentView(R.layout.fragment_recipe_master_list);
             RecipeMasterListFragment recipeListFragment = new RecipeMasterListFragment();

@@ -2,13 +2,14 @@ package in.chundi.bakingapp;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -18,6 +19,8 @@ import java.util.ArrayList;
  * This adapter ties the recycler view (fragment_recipe_master_list.xml ) to recipe images
  * each of which will fill up the image view in fragment_recipe_master_list_item.xml to the adapter
  * The adpater shall take a json object and retrieve images/thumbnails to show the recipe
+ *
+ * using PICASSO Library to load images
  */
 
 public class RecipeListAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
@@ -50,11 +53,15 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
     public void onBindViewHolder(RecipeViewHolder holder, int position) {
         //Log.d(TAG, "# " + position);
         r = recipeArrayList.get(position);
-        Log.d(TAG, r.getRecipeName() + " and Its Image is :" + r.getRecipeImg());
+        //Log.d(TAG, r.getRecipeName() + " and Its Image is :" + r.getRecipeImg());
         ImageView imageView = holder.listRecipeImageView;
         if (r.getRecipeImg().equals(""))
             imageView.setImageResource(R.drawable.welcome);
-        // to implement else where the image url is taken and displayed
+            // we use picasso library to load images from the image url
+        else {
+            Picasso.with(getContext()).load(r.getRecipeImg()).fit().into(imageView);
+        }
+
         TextView textView = holder.listRecipeTextView;
         textView.setText(r.getRecipeName());
 

@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:background="@color/colorAccent"
         android:indicatorStart="14.5sp"
+        android:listSelector="#0f0"
         android:padding="8dp"
         android:textAlignment="center"
         android:textSize="36sp" />
