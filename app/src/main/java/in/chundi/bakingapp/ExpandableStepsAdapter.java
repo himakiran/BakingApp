@@ -3,7 +3,6 @@ package in.chundi.bakingapp;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,7 +70,7 @@ public class ExpandableStepsAdapter extends BaseExpandableListAdapter {
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
         final ArrayList<String> childText = (ArrayList<String>) getChild(groupPosition, childPosition);
-        Log.d(TAG, "CHILDTEXT : " + childText.toString());
+        //Log.d(TAG, "CHILDTEXT : " + childText.toString());
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -84,7 +83,7 @@ public class ExpandableStepsAdapter extends BaseExpandableListAdapter {
                 .findViewById(R.id.StepsListLongDesc);
 
         txtListChild.setText(gd.getLongDesc());
-        Log.d(TAG, gd.getLongDesc());
+        //Log.d(TAG, gd.getLongDesc());
 
         final String urlText = gd.getVideoUrl();
 
@@ -93,7 +92,7 @@ public class ExpandableStepsAdapter extends BaseExpandableListAdapter {
 
         //Picasso.with(mContext).load(R.drawable.bakingthumb).into(imageView);
 
-        Log.d(TAG, "URI IS : " + Uri.parse(urlText).toString());
+        //Log.d(TAG, "URI IS : " + Uri.parse(urlText).toString());
         initializePlayer(Uri.parse(urlText));
 
 
@@ -161,7 +160,7 @@ public class ExpandableStepsAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
         String headerTitle = (String) getGroup(groupPosition);
-        Log.d(TAG, headerTitle);
+        //Log.d(TAG, headerTitle);
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);

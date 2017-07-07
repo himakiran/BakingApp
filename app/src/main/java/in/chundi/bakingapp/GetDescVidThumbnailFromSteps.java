@@ -1,7 +1,5 @@
 package in.chundi.bakingapp;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 
 /**
@@ -15,7 +13,7 @@ public class GetDescVidThumbnailFromSteps {
     public GetDescVidThumbnailFromSteps(ArrayList<String> s) {
 
         mString = s;
-        Log.d(TAG, "M STRING ARRAY IS " + mString.toString());
+        //Log.d(TAG, "M STRING ARRAY IS " + mString.toString());
 
 
     }

@@ -26,13 +26,16 @@ import static in.chundi.bakingapp.R.id.recipes;
 
 public class RecipeMasterListFragment extends Fragment {
 
+    private static final int SPAN_COUNT = 2;
+    private static final String KEY_LAYOUT_MANAGER = "layoutManager";
     public String TAG = RecipeMasterListFragment.class.getSimpleName();
-    LinearLayoutManager LLayoutManager;
-    private RecyclerView recyclerView;
+    //    LinearLayoutManager LLayoutManager;
+    protected RecyclerView mRecyclerView;
+    protected LayoutManagerType mCurrentLayoutManagerType;
+    protected RecyclerView.LayoutManager mLayoutManager;
     private JSONArray j;
     private Bundle bundle;
     private GetRecipes gr;
-
     public RecipeMasterListFragment() {
 
 
@@ -56,25 +59,36 @@ public class RecipeMasterListFragment extends Fragment {
         ArrayList<Recipe> arrayList = gr.getRecipeArrayList();
 
         final View rootView = inflater.inflate(R.layout.fragment_recipe_master_list, container, false);
+        rootView.setTag(TAG);
 
         // Get a reference to the GridView in the fragment_recipe_master_list xml layout file
-        recyclerView = (RecyclerView) rootView.findViewById(recipes);
+        mRecyclerView = (RecyclerView) rootView.findViewById(recipes);
 
         // Create the adapter
         // This adapter takes in the context and an ArrayList of ALL the recipe image resources to display
 
 
         // Here we r displaying the recycler view in a linear layout fashion
-        LLayoutManager = new LinearLayoutManager(this.getContext());
-        recyclerView.setLayoutManager(LLayoutManager);
-        recyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
+
+        if (savedInstanceState != null) {
+            // Restore saved layout manager type.
+            mCurrentLayoutManagerType = (LayoutManagerType) savedInstanceState
+                    .getSerializable(KEY_LAYOUT_MANAGER);
+        }
+
+        setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
+
+
+        mRecyclerView.setHasFixedSize(true);
 
         RecipeListAdapter rAdapter = new RecipeListAdapter(this.getContext(), arrayList);
 
 
-        recyclerView.setAdapter(rAdapter);
+        mRecyclerView.setAdapter(rAdapter);
 
-        ItemClickSupport.addTo(recyclerView).setOnItemClickListener(
+        ItemClickSupport.addTo(mRecyclerView).setOnItemClickListener(
                 new ItemClickSupport.OnItemClickListener() {
                     @Override
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
@@ -83,12 +97,14 @@ public class RecipeMasterListFragment extends Fragment {
                             JSONObject jsonObject = j.getJSONObject(position);
                             Bundle bundle = new Bundle();
                             bundle.putString("jsonObject", jsonObject.toString());
-                            getActivity().setContentView(R.layout.fragment_recipe_detail_list);
+                            //getActivity().setContentView(R.layout.fragment_recipe_detail_list);
+                            getActivity().setContentView(R.layout.fragment_container);
                             RecipeDetailListFragment recipeDetailListFragment = new RecipeDetailListFragment();
                             recipeDetailListFragment.setArguments(bundle);
                             FragmentManager fg = getActivity().getSupportFragmentManager();
                             fg.beginTransaction()
-                                    .add(R.id.recipe_container, recipeDetailListFragment)
+                                    .replace(R.id.fragment_container, recipeDetailListFragment)
+                                    .addToBackStack(null)
                                     .commit();
 
                         } catch (JSONException je) {
@@ -107,5 +123,40 @@ public class RecipeMasterListFragment extends Fragment {
         return rootView;
 
 
+    }
+
+    /**
+     * Set RecyclerView's LayoutManager to the one given.
+     *
+     * @param layoutManagerType Type of layout manager to switch to.
+     */
+    public void setRecyclerViewLayoutManager(LayoutManagerType layoutManagerType) {
+        int scrollPosition = 0;
+
+        // If a layout manager has already been set, get current scroll position.
+        if (mRecyclerView.getLayoutManager() != null) {
+            scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
+                    .findFirstCompletelyVisibleItemPosition();
+        }
+
+
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
+
+
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.scrollToPosition(scrollPosition);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save currently selected layout manager.
+        savedInstanceState.putSerializable(KEY_LAYOUT_MANAGER, mCurrentLayoutManagerType);
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    private enum LayoutManagerType {
+        GRID_LAYOUT_MANAGER,
+        LINEAR_LAYOUT_MANAGER
     }
 }

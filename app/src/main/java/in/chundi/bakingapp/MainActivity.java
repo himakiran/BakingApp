@@ -68,14 +68,15 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
 
 
             // create and display RecipeListFragment
-            setContentView(R.layout.fragment_recipe_master_list);
+            //setContentView(R.layout.fragment_recipe_master_list);
+            setContentView(R.layout.fragment_container);
             recipeListFragment = new RecipeMasterListFragment();
             recipeListFragment.setArguments(b);
 
             FragmentManager fragmentManager = getSupportFragmentManager();
 
             fragmentManager.beginTransaction()
-                    .add(R.id.container, recipeListFragment, TAG)
+                    .add(R.id.fragment_container, recipeListFragment, TAG)
                     .commit();
 
 
@@ -94,6 +95,16 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
+            Log.d(TAG, "back pressed if");
+            getFragmentManager().popBackStack();
+        } else {
+            Log.d(TAG, "Back pressed else");
+            super.onBackPressed();
+        }
+    }
 
 
 

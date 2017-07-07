@@ -73,12 +73,14 @@ public class RecipeDetailListFragment extends Fragment {
 
                         Bundle bundle = new Bundle();
                         bundle.putString("jsonStepsArray", jsonArray.toString());
-                        getActivity().setContentView(R.layout.fragment_recipe_steps_list);
+                        //getActivity().setContentView(R.layout.fragment_recipe_steps_list);
+                        getActivity().setContentView(R.layout.fragment_container);
                         RecipeStepsListFragment recipeStepsListFragment = new RecipeStepsListFragment();
                         recipeStepsListFragment.setArguments(bundle);
                         FragmentManager fg = getActivity().getSupportFragmentManager();
                         fg.beginTransaction()
-                                .add(R.id.recipe_steps_container, recipeStepsListFragment)
+                                .replace(R.id.fragment_container, recipeStepsListFragment)
+                                .addToBackStack(null)
                                 .commit();
 
                     } catch (JSONException je) {
