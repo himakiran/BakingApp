@@ -3,6 +3,7 @@ package in.chundi.bakingapp;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,8 +56,13 @@ public class ExpandableStepsAdapter extends BaseExpandableListAdapter {
     public Object getChild(int groupPosition, int childPosititon) {
         //Log.d(TAG, "Child returned is " + this.listStepsChild.get(this.listStepsHeader.get(groupPosition)));
         //.get(childPosititon).toString());
+        Log.d(TAG, " Group Possn : " + groupPosition + " child Posn : " + childPosititon + "  ;");
+        Log.d(TAG, " : LIST STPS HDR : " + this.listStepsHeader.get(groupPosition));
+        Log.d(TAG, " : LIST STPS CHD : " + this.listStepsChild.get(this.listStepsHeader.get(groupPosition)));
+        Log.d(TAG, " -------------- ");
         return this.listStepsChild.get(this.listStepsHeader.get(groupPosition));
         // .get(childPosititon);
+
 
     }
 
@@ -72,6 +78,8 @@ public class ExpandableStepsAdapter extends BaseExpandableListAdapter {
         final ArrayList<String> childText = (ArrayList<String>) getChild(groupPosition, childPosition);
         //Log.d(TAG, "CHILDTEXT : " + childText.toString());
         if (convertView == null) {
+            Log.d(TAG, "CONVERT VIEW IS NULL");
+            Log.d(TAG, "PARENT VIEW GROUP IS : " + parent.toString());
             LayoutInflater infalInflater = (LayoutInflater) mContext
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.fragment_recipe_steps_list_child_items, null);
@@ -101,10 +109,13 @@ public class ExpandableStepsAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        //Log.d(TAG, ("No of Children  Of " + this.listStepsHeader.get(groupPosition) + " : " + this.listStepsChild.size()));
+        Log.d(TAG, ("No of Children  Of " + this.listStepsHeader.get(groupPosition) + " : " + this.listStepsChild.size()));
         //return this.listIngredientChild.size();//.get(this.listIngredientHeader.get(groupPosition))
-        return this.listStepsChild.get(this.listStepsHeader.get(groupPosition))
-                .size();
+//        return this.listStepsChild.get(this.listStepsHeader.get(groupPosition))
+//                .size();
+        // Because every step with a short description has only one child that has three fields namely long description,
+        // video url and thumbnail url.
+        return 1;
 
     }
 

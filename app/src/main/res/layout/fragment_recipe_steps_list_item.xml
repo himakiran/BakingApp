@@ -6,13 +6,13 @@
     android:orientation="vertical"
     android:padding="8dp">
 
+    <!--android:indicatorStart="14.5sp"-->
 
     <ExpandableListView
         android:id="@+id/recipe_steps_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:background="@color/colorAccent"
-        android:indicatorStart="14.5sp"
         android:listSelector="#0f0"
         android:padding="8dp"
         android:textAlignment="center"
