@@ -1,8 +1,11 @@
 package in.chundi.bakingapp;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,12 +23,14 @@ import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import static in.chundi.bakingapp.R.id.playerView;
 
 
 /**
@@ -56,10 +61,10 @@ public class ExpandableStepsAdapter extends BaseExpandableListAdapter {
     public Object getChild(int groupPosition, int childPosititon) {
         //Log.d(TAG, "Child returned is " + this.listStepsChild.get(this.listStepsHeader.get(groupPosition)));
         //.get(childPosititon).toString());
-        Log.d(TAG, " Group Possn : " + groupPosition + " child Posn : " + childPosititon + "  ;");
-        Log.d(TAG, " : LIST STPS HDR : " + this.listStepsHeader.get(groupPosition));
-        Log.d(TAG, " : LIST STPS CHD : " + this.listStepsChild.get(this.listStepsHeader.get(groupPosition)));
-        Log.d(TAG, " -------------- ");
+//        Log.d(TAG, " Group Possn : " + groupPosition + " child Posn : " + childPosititon + "  ;");
+//        Log.d(TAG, " : LIST STPS HDR : " + this.listStepsHeader.get(groupPosition));
+//        Log.d(TAG, " : LIST STPS CHD : " + this.listStepsChild.get(this.listStepsHeader.get(groupPosition)));
+//        Log.d(TAG, " -------------- ");
         return this.listStepsChild.get(this.listStepsHeader.get(groupPosition));
         // .get(childPosititon);
 
@@ -74,9 +79,13 @@ public class ExpandableStepsAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
-
+        if (mExoPlayer != null) {
+            releasePlayer();
+        }
         final ArrayList<String> childText = (ArrayList<String>) getChild(groupPosition, childPosition);
-        //Log.d(TAG, "CHILDTEXT : " + childText.toString());
+        Bitmap bitmap;
+        bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.welcome);
+        Log.d(TAG, "CHILDTEXT : " + childText.toString());
         if (convertView == null) {
             Log.d(TAG, "CONVERT VIEW IS NULL");
             Log.d(TAG, "PARENT VIEW GROUP IS : " + parent.toString());
@@ -94,14 +103,38 @@ public class ExpandableStepsAdapter extends BaseExpandableListAdapter {
         //Log.d(TAG, gd.getLongDesc());
 
         final String urlText = gd.getVideoUrl();
-
+        Log.i(TAG, urlText);
+        final String thumbNaiUrl = gd.getThumbnai();
+        Log.i(TAG, thumbNaiUrl);
         // Initialize the player view.
-        mPlayerView = (SimpleExoPlayerView) convertView.findViewById(R.id.playerView);
+        Log.i(TAG, "setting mPlayerView");
+        mPlayerView = (SimpleExoPlayerView) convertView.findViewById(playerView);
 
+        if (!urlText.equals("")) {
+
+            mPlayerView.requestFocus();
+            mPlayerView.setUseArtwork(true);
+            if (!thumbNaiUrl.equals("")) {
+
+                Uri imageUri = Uri.parse(thumbNaiUrl);
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(mContext.getContentResolver(), imageUri);
+                } catch (Exception e) {
+                    Log.d(TAG, e.toString());
+                }
+                mPlayerView.setDefaultArtwork(bitmap);
+            }
+
+            //Picasso.with(mContext).load(Uri.parse(thumbNaiUrl)).into(mPlayerView);
         //Picasso.with(mContext).load(R.drawable.bakingthumb).into(imageView);
 
         //Log.d(TAG, "URI IS : " + Uri.parse(urlText).toString());
-        initializePlayer(Uri.parse(urlText));
+
+            initializePlayer(Uri.parse(urlText));
+        } else {
+            Log.d(TAG, "setting No url hence No mPlayerView");
+            mPlayerView.setVisibility(View.GONE);
+        }
 
 
         return convertView;
@@ -109,7 +142,7 @@ public class ExpandableStepsAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        Log.d(TAG, ("No of Children  Of " + this.listStepsHeader.get(groupPosition) + " : " + this.listStepsChild.size()));
+        //Log.d(TAG, ("No of Children  Of " + this.listStepsHeader.get(groupPosition) + " : " + this.listStepsChild.size()));
         //return this.listIngredientChild.size();//.get(this.listIngredientHeader.get(groupPosition))
 //        return this.listStepsChild.get(this.listStepsHeader.get(groupPosition))
 //                .size();
@@ -125,18 +158,35 @@ public class ExpandableStepsAdapter extends BaseExpandableListAdapter {
      * +
      */
     private void initializePlayer(Uri mediaUri) {
+
         if (mExoPlayer == null) {
             // Create an instance of the ExoPlayer.
+            Log.d(TAG, "mExoplayer initialization");
             TrackSelector trackSelector = new DefaultTrackSelector();
             LoadControl loadControl = new DefaultLoadControl();
             mExoPlayer = ExoPlayerFactory.newSimpleInstance(mContext, trackSelector, loadControl);
+            mPlayerView.setVisibility(View.VISIBLE);
             mPlayerView.setPlayer(mExoPlayer);
-            // Prepare the MediaSource.
-            String userAgent = Util.getUserAgent(mContext, "bakingApp");
-            MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(mContext, userAgent), new DefaultExtractorsFactory(), null, null);
+            String useragent = Util.getUserAgent(mContext, "BakingApp");
+
+            MediaSource mediaSource = new ExtractorMediaSource(mediaUri,
+                    new DefaultHttpDataSourceFactory(useragent),
+                    new DefaultExtractorsFactory(), null, null);
+            Log.d(TAG, mediaSource.toString());
             mExoPlayer.prepare(mediaSource);
+
+//                mPlayerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
+//                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+//                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+//                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+
+
             mExoPlayer.setPlayWhenReady(true);
+
         }
+
     }
 
     /**

@@ -64,7 +64,7 @@ public class RecipeStepsListFragment extends Fragment {
                 tempS.add(1, temp.getString("videoURL"));
                 tempS.add(2, temp.getString("thumbnailURL"));
                 listDataChild.put(temp.getString("shortDescription"), tempS);
-                Log.d(TAG, "Position i = " + i + " :: " + tempS.toString());
+                //Log.d(TAG, "Position i = " + i + " :: " + tempS.toString());
 
 
             }

@@ -116,7 +116,7 @@ public class RecipeMasterListFragment extends Fragment {
 
         );
 
-        Log.d(TAG, getActivity().toString());
+        //Log.d(TAG, getActivity().toString());
 
 
         // Return the root view
