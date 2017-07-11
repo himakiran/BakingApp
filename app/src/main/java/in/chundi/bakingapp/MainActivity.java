@@ -23,6 +23,8 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
     Bundle b;
     Bundle sa;
     RecipeMasterListFragment recipeListFragment;
+    private boolean mTwoPane = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,13 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (findViewById(R.id.recipe_Grid) != null)
+            mTwoPane = true;
+        if (mTwoPane) {
+            View v = findViewById(R.id.recipe_Grid);
+            showBakeRecipes(v);
+        }
+
 
 
 
@@ -62,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
         jsonResult = result;
         b = new Bundle();
         b.putString("JArray", jsonResult.toString());
+        b.putBoolean("isTablet", mTwoPane);
+
         if (jsonResult != null) {
             no_of_recipes = jsonResult.length();
             Log.i(TAG, "No of json items are " + no_of_recipes);
@@ -80,13 +91,13 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
                     .commit();
 
 
-
         } else {
             Log.e(TAG, "No Json received");
             Toast.makeText(this, "No Recipe received ", Toast.LENGTH_LONG).show();
         }
 
-    }
+        }
+
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {

@@ -16,6 +16,6 @@
         android:listSelector="#0f0"
         android:padding="8dp"
         android:textAlignment="center"
-        android:textSize="36sp" />
+        android:textSize="@dimen/text_size_heading" />
 
 </FrameLayout>

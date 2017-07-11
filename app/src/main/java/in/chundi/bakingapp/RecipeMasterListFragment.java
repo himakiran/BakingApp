@@ -3,6 +3,7 @@ package in.chundi.bakingapp;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,6 +18,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import static in.chundi.bakingapp.R.id.recipes;
+import static in.chundi.bakingapp.R.id.recipes_tablet;
+import static in.chundi.bakingapp.R.layout.fragment_recipe_master_list;
 
 
 /**
@@ -36,6 +39,8 @@ public class RecipeMasterListFragment extends Fragment {
     private JSONArray j;
     private Bundle bundle;
     private GetRecipes gr;
+    private Boolean mTwoPane;
+
     public RecipeMasterListFragment() {
 
 
@@ -48,6 +53,7 @@ public class RecipeMasterListFragment extends Fragment {
 
 
         bundle = getArguments();
+        mTwoPane = bundle.getBoolean("isTablet");
 
         try {
             j = new JSONArray(bundle.getString("JArray"));
@@ -58,30 +64,59 @@ public class RecipeMasterListFragment extends Fragment {
         gr = new GetRecipes(this.getContext(), j);
         ArrayList<Recipe> arrayList = gr.getRecipeArrayList();
 
-        final View rootView = inflater.inflate(R.layout.fragment_recipe_master_list, container, false);
-        rootView.setTag(TAG);
+        final View rootView = inflater.inflate(fragment_recipe_master_list, container, false);
 
-        // Get a reference to the GridView in the fragment_recipe_master_list xml layout file
-        mRecyclerView = (RecyclerView) rootView.findViewById(recipes);
+        if (!mTwoPane) {
 
-        // Create the adapter
-        // This adapter takes in the context and an ArrayList of ALL the recipe image resources to display
+            rootView.setTag(TAG);
+
+            // Get a reference to the GridView in the fragment_recipe_master_list xml layout file
+            mRecyclerView = (RecyclerView) rootView.findViewById(recipes);
 
 
-        // Here we r displaying the recycler view in a linear layout fashion
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
+            // Create the adapter
+            // This adapter takes in the context and an ArrayList of ALL the recipe image resources to display
 
-        if (savedInstanceState != null) {
-            // Restore saved layout manager type.
-            mCurrentLayoutManagerType = (LayoutManagerType) savedInstanceState
-                    .getSerializable(KEY_LAYOUT_MANAGER);
+
+            // Here we r displaying the recycler view in a linear layout fashion
+            mLayoutManager = new LinearLayoutManager(getActivity());
+            mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
+
+            if (savedInstanceState != null) {
+                // Restore saved layout manager type.
+                mCurrentLayoutManagerType = (LayoutManagerType) savedInstanceState
+                        .getSerializable(KEY_LAYOUT_MANAGER);
+            }
+
+            setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
+        } else {
+
+            mRecyclerView = (RecyclerView) rootView.findViewById(recipes_tablet);
+            Log.d(TAG, "reached here");
+            mCurrentLayoutManagerType = LayoutManagerType.GRID_LAYOUT_MANAGER;
+            if (savedInstanceState != null) {
+                // Restore saved layout manager type.
+                mCurrentLayoutManagerType = (LayoutManagerType) savedInstanceState
+                        .getSerializable(KEY_LAYOUT_MANAGER);
+            }
+
+
+            int scrollPosition = 0;
+
+            // If a layout manager has already been set, get current scroll position.
+            if (mRecyclerView.getLayoutManager() != null) {
+                scrollPosition = ((GridLayoutManager) mRecyclerView.getLayoutManager())
+                        .getPosition(mRecyclerView);
+            }
+            mLayoutManager = new GridLayoutManager(getActivity(), 3);
+
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            mRecyclerView.scrollToPosition(scrollPosition);
+
         }
 
-        setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
 
-
-        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setHasFixedSize(false);
 
         RecipeListAdapter rAdapter = new RecipeListAdapter(this.getContext(), arrayList);
 

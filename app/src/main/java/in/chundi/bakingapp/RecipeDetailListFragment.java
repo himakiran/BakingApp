@@ -65,7 +65,7 @@ public class RecipeDetailListFragment extends Fragment {
             textView.setText(j.getString("name"));
             //Log.d(TAG, textView.getText().toString());
             Button b = (Button) rootView.findViewById(recipe_steps);
-            b.setText("Steps to Make " + j.getString("name"));
+            b.setText("Steps");
             b.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     try {
@@ -90,7 +90,7 @@ public class RecipeDetailListFragment extends Fragment {
             });
             //Log.d(TAG, b.getText().toString());
             textView = (TextView) rootView.findViewById(recipe_servings);
-            textView.setText("No of Servings : " + j.getString("servings"));
+            textView.setText("No of Servings:" + j.getString("servings"));
             //Log.d(TAG, textView.getText().toString());
 
             // Get the content of listDataHeader and listDatachild from the json object

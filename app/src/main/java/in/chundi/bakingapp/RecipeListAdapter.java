@@ -16,7 +16,7 @@ import java.util.ArrayList;
 /**
  * Created by userhk on 01/07/17.
  * Code used and modified from https://guides.codepath.com/android/using-the-recyclerview
- * This adapter ties the recycler view (fragment_recipe_master_list.xml ) to recipe images
+ * This adapter ties the recycler view (fragment_recipe_master_listto recipe images
  * each of which will fill up the image view in fragment_recipe_master_list_item.xml to the adapter
  * The adpater shall take a json object and retrieve images/thumbnails to show the recipe
  *

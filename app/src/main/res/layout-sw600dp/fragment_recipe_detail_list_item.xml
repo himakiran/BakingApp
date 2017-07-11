@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+
+        <TextView
+            android:id="@+id/recipe_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:text="RECIPE NAME"
+            android:textAlignment="center"
+            android:textSize="45sp"
+            android:textStyle="bold" />
+
+
+        <Button
+            android:id="@+id/recipe_steps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:onClick="showSteps"
+            android:text="RECIPE STEPS"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textSize="45sp">
+
+        </Button>
+
+        <TextView
+            android:id="@+id/recipe_servings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:text="No of Servings"
+            android:textAlignment="center"
+            android:textSize="45sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/recipe_ingredients"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:text="Ingredients"
+            android:textAlignment="center"
+            android:textSize="45sp"
+            android:textStyle="bold" />
+
+        <ExpandableListView
+            android:id="@+id/recipe_ingredients_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:listSelector="#0f0"
+            android:padding="8dp"
+            android:textAlignment="center"
+            android:textSize="34sp" /><!--android:indicatorStart="14.5sp"-->
+    </LinearLayout>
+
+</ScrollView>
