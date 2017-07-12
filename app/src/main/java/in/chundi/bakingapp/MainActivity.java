@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
         b = new Bundle();
         b.putString("JArray", jsonResult.toString());
         b.putBoolean("isTablet", mTwoPane);
+        b.putBoolean("sidePane", false); //
 
         if (jsonResult != null) {
             no_of_recipes = jsonResult.length();

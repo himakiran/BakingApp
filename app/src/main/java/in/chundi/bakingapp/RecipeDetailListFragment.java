@@ -39,6 +39,7 @@ public class RecipeDetailListFragment extends Fragment {
     private Bundle bundle;
     private JSONObject j;
     private String TAG = RecipeDetailListFragment.class.getSimpleName();
+    private Boolean mTwoPane;
 
     public RecipeDetailListFragment() {
 
@@ -54,8 +55,11 @@ public class RecipeDetailListFragment extends Fragment {
 
 
         String jsonString = bundle.getString("jsonObject");
+        mTwoPane = bundle.getBoolean("isTablet");
+
 
         final View rootView = inflater.inflate(R.layout.fragment_recipe_detail_list_item, container, false);
+
 
         try {
 
@@ -86,7 +90,7 @@ public class RecipeDetailListFragment extends Fragment {
                     } catch (JSONException je) {
                         Log.d(TAG, je.toString());
                     }
-                }
+                    }
             });
             //Log.d(TAG, b.getText().toString());
             textView = (TextView) rootView.findViewById(recipe_servings);
@@ -114,17 +118,40 @@ public class RecipeDetailListFragment extends Fragment {
                 //Log.d(TAG, childList.toString());
                 listDataChild.put(ingredientsJsonArray.getJSONObject(i).getString("ingredient"), childList);
                 childList = null;
-            }
+                }
             expListView = (ExpandableListView) rootView.findViewById(recipe_ingredients_list);
             listAdapter = new ExpandableIngredientListAdapter(getContext(), listDataHeader, listDataChild);
             expListView.setAdapter(listAdapter);
 
+            if (mTwoPane) {
+
+                // we want to call a new instance of the master list fragment to paint
+                // us a linear card display of all recipes.
+                RecipeMasterListFragment rmf = new RecipeMasterListFragment();
+
+                bundle.putString("JArray", bundle.getString("JArray"));
+                bundle.putBoolean("isTablet", false);
+                bundle.putBoolean("sidePane", true);
+
+                rmf.setArguments(bundle);
+
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+
+                fragmentManager.beginTransaction()
+                        .add(R.id.tabletContainer, rmf)
+                        .addToBackStack(null)
+                        .commit();
+            }
+
         } catch (JSONException je) {
             Log.d(TAG, je.toString());
-        }
+            }
+
+
         Log.d(TAG, getActivity().toString());
         // Return the root view
         return rootView;
+
 
     }
 

@@ -18,7 +18,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import static in.chundi.bakingapp.R.id.recipes;
-import static in.chundi.bakingapp.R.id.recipes_tablet;
 import static in.chundi.bakingapp.R.layout.fragment_recipe_master_list;
 
 
@@ -40,6 +39,7 @@ public class RecipeMasterListFragment extends Fragment {
     private Bundle bundle;
     private GetRecipes gr;
     private Boolean mTwoPane;
+    private Boolean sidePane;
 
     public RecipeMasterListFragment() {
 
@@ -54,6 +54,7 @@ public class RecipeMasterListFragment extends Fragment {
 
         bundle = getArguments();
         mTwoPane = bundle.getBoolean("isTablet");
+        sidePane = bundle.getBoolean("sidePane");
 
         try {
             j = new JSONArray(bundle.getString("JArray"));
@@ -64,9 +65,9 @@ public class RecipeMasterListFragment extends Fragment {
         gr = new GetRecipes(this.getContext(), j);
         ArrayList<Recipe> arrayList = gr.getRecipeArrayList();
 
-        final View rootView = inflater.inflate(fragment_recipe_master_list, container, false);
+        View rootView = inflater.inflate(fragment_recipe_master_list, container, false);
 
-        if (!mTwoPane) {
+        if (!mTwoPane && !sidePane) {
 
             rootView.setTag(TAG);
 
@@ -89,9 +90,9 @@ public class RecipeMasterListFragment extends Fragment {
             }
 
             setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
-        } else {
+        } else if (mTwoPane && !sidePane) {
 
-            mRecyclerView = (RecyclerView) rootView.findViewById(recipes_tablet);
+            mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recipes_tablet);
             Log.d(TAG, "reached here");
             mCurrentLayoutManagerType = LayoutManagerType.GRID_LAYOUT_MANAGER;
             if (savedInstanceState != null) {
@@ -113,6 +114,28 @@ public class RecipeMasterListFragment extends Fragment {
             mRecyclerView.setLayoutManager(mLayoutManager);
             mRecyclerView.scrollToPosition(scrollPosition);
 
+        } else if (!mTwoPane && sidePane) {
+
+            rootView = inflater.inflate(R.layout.fragment_recipe_master_list_sidepane, container, false);
+            mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recipes_side_pane);
+            mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
+            if (savedInstanceState != null) {
+                // Restore saved layout manager type.
+                mCurrentLayoutManagerType = (LayoutManagerType) savedInstanceState
+                        .getSerializable(KEY_LAYOUT_MANAGER);
+            }
+            int scrollPos = 0;
+
+            // If a layout manager has already been set, get current scroll position.
+            if (mRecyclerView.getLayoutManager() != null) {
+                scrollPos = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
+                        .getPosition(mRecyclerView);
+            }
+
+            setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
+            mRecyclerView.scrollToPosition(scrollPos);
+
+
         }
 
 
@@ -132,7 +155,11 @@ public class RecipeMasterListFragment extends Fragment {
                             JSONObject jsonObject = j.getJSONObject(position);
                             Bundle bundle = new Bundle();
                             bundle.putString("jsonObject", jsonObject.toString());
+                            bundle.putBoolean("isTablet", mTwoPane);
+                            bundle.putString("JArray", j.toString());
+
                             //getActivity().setContentView(R.layout.fragment_recipe_detail_list);
+
                             getActivity().setContentView(R.layout.fragment_container);
                             RecipeDetailListFragment recipeDetailListFragment = new RecipeDetailListFragment();
                             recipeDetailListFragment.setArguments(bundle);
@@ -188,6 +215,7 @@ public class RecipeMasterListFragment extends Fragment {
         // Save currently selected layout manager.
         savedInstanceState.putSerializable(KEY_LAYOUT_MANAGER, mCurrentLayoutManagerType);
         super.onSaveInstanceState(savedInstanceState);
+
     }
 
     private enum LayoutManagerType {
