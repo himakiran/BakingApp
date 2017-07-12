@@ -66,7 +66,7 @@ public class RecipeMasterListFragment extends Fragment {
         ArrayList<Recipe> arrayList = gr.getRecipeArrayList();
 
         View rootView = inflater.inflate(fragment_recipe_master_list, container, false);
-
+        // This fragment is called from main activity from a phone layout.
         if (!mTwoPane && !sidePane) {
 
             rootView.setTag(TAG);
@@ -90,7 +90,8 @@ public class RecipeMasterListFragment extends Fragment {
             }
 
             setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
-        } else if (mTwoPane && !sidePane) {
+        } // This fragment called from main activity from tablet layout
+        else if (mTwoPane && !sidePane) {
 
             mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recipes_tablet);
             Log.d(TAG, "reached here");
@@ -114,7 +115,8 @@ public class RecipeMasterListFragment extends Fragment {
             mRecyclerView.setLayoutManager(mLayoutManager);
             mRecyclerView.scrollToPosition(scrollPosition);
 
-        } else if (!mTwoPane && sidePane) {
+        } // This fragment called from side pane of tablet
+        else if (mTwoPane && sidePane) {
 
             rootView = inflater.inflate(R.layout.fragment_recipe_master_list_sidepane, container, false);
             mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recipes_side_pane);
@@ -139,6 +141,7 @@ public class RecipeMasterListFragment extends Fragment {
         }
 
 
+
         mRecyclerView.setHasFixedSize(false);
 
         RecipeListAdapter rAdapter = new RecipeListAdapter(this.getContext(), arrayList);
@@ -156,6 +159,7 @@ public class RecipeMasterListFragment extends Fragment {
                             Bundle bundle = new Bundle();
                             bundle.putString("jsonObject", jsonObject.toString());
                             bundle.putBoolean("isTablet", mTwoPane);
+                            bundle.putBoolean("sidePane", sidePane);
                             bundle.putString("JArray", j.toString());
 
                             //getActivity().setContentView(R.layout.fragment_recipe_detail_list);

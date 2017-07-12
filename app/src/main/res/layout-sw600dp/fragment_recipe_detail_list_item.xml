@@ -32,13 +32,11 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="3"
-        android:background="#F6402C"
         android:fillViewport="true">
 
         <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-            android:background="#F6402C"
         android:orientation="vertical"
         android:padding="12dp">
 

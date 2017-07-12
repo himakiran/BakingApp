@@ -40,7 +40,7 @@ public class RecipeDetailListFragment extends Fragment {
     private JSONObject j;
     private String TAG = RecipeDetailListFragment.class.getSimpleName();
     private Boolean mTwoPane;
-
+    private Boolean sidePane;
     public RecipeDetailListFragment() {
 
     }
@@ -56,6 +56,7 @@ public class RecipeDetailListFragment extends Fragment {
 
         String jsonString = bundle.getString("jsonObject");
         mTwoPane = bundle.getBoolean("isTablet");
+        sidePane = bundle.getBoolean("sidePane");
 
 
         final View rootView = inflater.inflate(R.layout.fragment_recipe_detail_list_item, container, false);
@@ -130,7 +131,7 @@ public class RecipeDetailListFragment extends Fragment {
                 RecipeMasterListFragment rmf = new RecipeMasterListFragment();
 
                 bundle.putString("JArray", bundle.getString("JArray"));
-                bundle.putBoolean("isTablet", false);
+                bundle.putBoolean("isTablet", true);
                 bundle.putBoolean("sidePane", true);
 
                 rmf.setArguments(bundle);
@@ -138,7 +139,7 @@ public class RecipeDetailListFragment extends Fragment {
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
 
                 fragmentManager.beginTransaction()
-                        .add(R.id.tabletContainer, rmf)
+                        .replace(R.id.tabletContainer, rmf)
                         .addToBackStack(null)
                         .commit();
             }
