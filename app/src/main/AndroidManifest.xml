@@ -33,12 +33,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".WidgetShowRecipeListActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.SHOW_RECIPE_LIST" />
-            </intent-filter>
-        </activity>
-
 
     </application>
     <uses-permission android:name="android.permission.INTERNET" />

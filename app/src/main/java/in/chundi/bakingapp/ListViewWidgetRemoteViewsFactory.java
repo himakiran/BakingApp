@@ -1,11 +1,13 @@
 package in.chundi.bakingapp;
 
+import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -21,30 +23,38 @@ import java.util.ArrayList;
 
 public class ListViewWidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory, AsyncResponse {
 
+    public static final String EXTRA_ITEM = "in.chundi.bakingapp.EXTRA_ITEM";
     private Context mContext;
     private ArrayList<String> records;
     private String jsonUrlString;
     private BakingRecipeAsynctask ba;
     private JSONArray jsonResult;
     private String TAG = ListViewWidgetRemoteViewsFactory.class.getSimpleName();
+    private int mAppWidgetId;
+    private Intent mIntent;
 
-    public ListViewWidgetRemoteViewsFactory(Context context) {
+    public ListViewWidgetRemoteViewsFactory(Context context, Intent intent) {
         mContext = context;
+        mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
+                AppWidgetManager.INVALID_APPWIDGET_ID);
+        mIntent = intent;
+
     }
 
     @Override
     public void onCreate() {
         Log.d(TAG, "INSIDE " + "OnCreate");
-        onDataSetChanged();
+
         jsonUrlString = mContext.getString(R.string.json_url);
+
+        fillRecords();
+
 
     }
 
-    @Override
-    public void onDataSetChanged() {
-        Log.d(TAG, "INSIDE " + "onDataSetChanged");
-
+    private void fillRecords() {
         ba = new BakingRecipeAsynctask();
+
         ba.delegate = this;
         ConnectivityManager cm =
                 (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -52,10 +62,18 @@ public class ListViewWidgetRemoteViewsFactory implements RemoteViewsService.Remo
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
         if (isConnected) {
+            Log.d(TAG, "Internet available");
             ba.execute(jsonUrlString);
         } else {
             Log.d(TAG, "No internet connectivity");
         }
+    }
+
+    @Override
+    public void onDataSetChanged() {
+        Log.d(TAG, "INSIDE " + "onDataSetChanged");
+        fillRecords();
+
     }
 
     @Override
@@ -69,6 +87,7 @@ public class ListViewWidgetRemoteViewsFactory implements RemoteViewsService.Remo
                     j = result.getJSONObject(i);
                     records.add(i, j.getString("name"));
                 }
+                Log.d(TAG, records.toString());
             } catch (JSONException je) {
                 Log.d(TAG, je.toString());
             }
@@ -83,19 +102,26 @@ public class ListViewWidgetRemoteViewsFactory implements RemoteViewsService.Remo
 
     @Override
     public int getCount() {
-        Log.d("size=", records.size() + "");
+        if (records != null) {
+            Log.d("size=", records.size() + "");
+            return records.size();
+        }
 
-        return records.size();
+        return 0;
     }
 
     @Override
     public RemoteViews getViewAt(int position) {
+        Log.d(TAG, "getViewAt called");
         RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.widget_item);
         String data = records.get(position);
         rv.setTextViewText(R.id.recipe_wname, data);
+        rv.setViewVisibility(R.id.recipe_wname, View.VISIBLE);
         Bundle extras = new Bundle();
         extras.putInt(RecipeWidgetProvider.EXTRA_ITEM, position);
         Intent fillInIntent = new Intent();
+        fillInIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+        fillInIntent.putExtra(EXTRA_ITEM, position);
         fillInIntent.putExtra("widget_recipe_name", data);
         fillInIntent.putExtras(extras);
         rv.setOnClickFillInIntent(R.id.widget_item_layout, fillInIntent);

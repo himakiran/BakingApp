@@ -17,6 +17,6 @@ public class ListViewWidgetService extends RemoteViewsService {
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
         Log.d(TAG, "Inside " + TAG);
-        return new ListViewWidgetRemoteViewsFactory(getApplicationContext());
+        return new ListViewWidgetRemoteViewsFactory(getApplicationContext(), intent);
     }
 }

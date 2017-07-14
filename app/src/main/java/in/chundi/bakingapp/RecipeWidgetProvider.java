@@ -6,10 +6,12 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 /**
  * Created by userhk on 12/07/17.
@@ -18,6 +20,7 @@ import android.widget.RemoteViews;
 public class RecipeWidgetProvider extends AppWidgetProvider {
 
     public static final String EXTRA_ITEM = "in.chundi.bakingapp.EXTRA_ITEM";
+    public static final String SHOW_INGRED = "in.chundi.bakingapp.SHOW_INGRED";
     public static String TAG = RecipeWidgetProvider.class.getSimpleName();
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -30,13 +33,18 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
         if (width < 100) {
             Log.d(TAG, "WIDTH IS : " + width);
             rv = showSimpleIconRemoteView(context);
+            appWidgetManager.updateAppWidget(appWidgetId, rv);
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.recipe_List);
+
         } else {
             Log.d(TAG, "WIDTH IS : " + width);
             Log.d(TAG, "Show Recipe List Remote View");
-            rv = showRecipeListRemoteView(context);
-
+            rv = showRecipeListRemoteView(context, appWidgetId);
+            appWidgetManager.updateAppWidget(appWidgetId, rv);
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.recipe_List);
+            Log.d(TAG, "Received views " + rv.toString());
         }
-        appWidgetManager.updateAppWidget(appWidgetId, rv);
+
 
 
     }
@@ -50,18 +58,15 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
 
     }
 
-    private static RemoteViews showRecipeListRemoteView(Context context) {
+    private static RemoteViews showRecipeListRemoteView(Context context, int appWidgetId) {
 
         Log.d(TAG, "INSIDE show Recipe Grid Remote View");
         Intent intent = new Intent(context, ListViewWidgetService.class);
-
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+        intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_list);
-        views.setRemoteAdapter(R.id.recipe_List, intent);
-        Intent startActivityIntent = new Intent(context, WidgetShowRecipeListActivity.class);
-        PendingIntent startActivityPendingIntent = PendingIntent.getActivity(context, 0, startActivityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        views.setPendingIntentTemplate(R.id.recipe_List, startActivityPendingIntent);
+        views.setRemoteAdapter(appWidgetId, R.id.recipe_List, intent);
         views.setEmptyView(R.id.recipe_List, R.id.empty_view);
-
         return views;
     }
 
@@ -71,9 +76,10 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
         for (int a = 0; a < appWidgetIds.length; a++) {
             updateAppWidget(context, appWidgetManager, appWidgetIds[a]);
         }
-        ;
+        super.onUpdate(context, appWidgetManager, appWidgetIds);
 
     }
+
 
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
@@ -98,5 +104,18 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
                                           Bundle newOptions) {
         updateAppWidget(context, appWidgetManager, appWidgetId);
 
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        AppWidgetManager mgr = AppWidgetManager.getInstance(context);
+        if (intent.getAction().equals(SHOW_INGRED)) {
+            int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
+                    AppWidgetManager.INVALID_APPWIDGET_ID);
+            int viewIndex = intent.getIntExtra(EXTRA_ITEM, 0);
+            String recipe_name = intent.getStringExtra("widget_recipe_name");
+            Toast.makeText(context, "Touched view " + recipe_name + "@ pos : " + viewIndex, Toast.LENGTH_SHORT).show();
+        }
+        super.onReceive(context, intent);
     }
 }
