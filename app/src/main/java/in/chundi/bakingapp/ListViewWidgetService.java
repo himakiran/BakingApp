@@ -1,7 +1,6 @@
 package in.chundi.bakingapp;
 
 import android.content.Intent;
-import android.util.Log;
 import android.widget.RemoteViewsService;
 
 
@@ -16,7 +15,7 @@ public class ListViewWidgetService extends RemoteViewsService {
 
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        Log.d(TAG, "Inside " + TAG);
+        //Log.d(TAG, "Inside " + TAG);
         return new ListViewWidgetRemoteViewsFactory(getApplicationContext(), intent);
     }
 }

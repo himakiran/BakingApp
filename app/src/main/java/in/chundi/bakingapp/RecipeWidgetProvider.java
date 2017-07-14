@@ -30,19 +30,19 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
         Bundle options = appWidgetManager.getAppWidgetOptions(appWidgetId);
         int width = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
         RemoteViews rv;
-        if (width < 100) {
-            Log.d(TAG, "WIDTH IS : " + width);
+        if (width < 120) {
+            //Log.d(TAG, "WIDTH IS : " + width);
             rv = showSimpleIconRemoteView(context);
             appWidgetManager.updateAppWidget(appWidgetId, rv);
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.recipe_List);
 
         } else {
-            Log.d(TAG, "WIDTH IS : " + width);
-            Log.d(TAG, "Show Recipe List Remote View");
+            //Log.d(TAG, "WIDTH IS : " + width);
+            //Log.d(TAG, "Show Recipe List Remote View");
             rv = showRecipeListRemoteView(context, appWidgetId);
             appWidgetManager.updateAppWidget(appWidgetId, rv);
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.recipe_List);
-            Log.d(TAG, "Received views " + rv.toString());
+            //Log.d(TAG, "Received views " + rv.toString());
         }
 
 

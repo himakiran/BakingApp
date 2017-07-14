@@ -62,7 +62,7 @@ public class ListViewWidgetRemoteViewsFactory implements RemoteViewsService.Remo
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
         if (isConnected) {
-            Log.d(TAG, "Internet available");
+            //Log.d(TAG, "Internet available");
             ba.execute(jsonUrlString);
         } else {
             Log.d(TAG, "No internet connectivity");
@@ -71,7 +71,7 @@ public class ListViewWidgetRemoteViewsFactory implements RemoteViewsService.Remo
 
     @Override
     public void onDataSetChanged() {
-        Log.d(TAG, "INSIDE " + "onDataSetChanged");
+        //Log.d(TAG, "INSIDE " + "onDataSetChanged");
         fillRecords();
 
     }
@@ -87,7 +87,7 @@ public class ListViewWidgetRemoteViewsFactory implements RemoteViewsService.Remo
                     j = result.getJSONObject(i);
                     records.add(i, j.getString("name"));
                 }
-                Log.d(TAG, records.toString());
+                //Log.d(TAG, records.toString());
             } catch (JSONException je) {
                 Log.d(TAG, je.toString());
             }
