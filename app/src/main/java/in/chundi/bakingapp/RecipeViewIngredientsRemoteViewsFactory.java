@@ -20,7 +20,7 @@ import java.util.ArrayList;
  * Created by userhk on 14/07/17.
  */
 
-public class ListViewWidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory, AsyncResponse {
+public class RecipeViewIngredientsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory, AsyncResponse {
 
     public static final String EXTRA_ITEM = "in.chundi.bakingapp.EXTRA_ITEM";
     private Context mContext;
@@ -28,15 +28,17 @@ public class ListViewWidgetRemoteViewsFactory implements RemoteViewsService.Remo
     private String jsonUrlString;
     private BakingRecipeAsynctask ba;
     private JSONArray jsonResult;
-    private String TAG = ListViewWidgetRemoteViewsFactory.class.getSimpleName();
+    private String TAG = RecipeViewIngredientsRemoteViewsFactory.class.getSimpleName();
     private int mAppWidgetId;
     private Intent mIntent;
+    private String recipeName;
 
-    public ListViewWidgetRemoteViewsFactory(Context context, Intent intent) {
+    public RecipeViewIngredientsRemoteViewsFactory(Context context, Intent intent) {
         mContext = context;
         mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                 AppWidgetManager.INVALID_APPWIDGET_ID);
         mIntent = intent;
+        recipeName = intent.getStringExtra("widget_recipe_name");
 
     }
 
@@ -79,12 +81,21 @@ public class ListViewWidgetRemoteViewsFactory implements RemoteViewsService.Remo
     public void processFinish(JSONArray result) {
         jsonResult = result;
         JSONObject j;
+        JSONObject ing;
+        JSONArray ingArray;
         if (jsonResult != null) {
             records = new ArrayList<String>(jsonResult.length());
             try {
                 for (int i = 0; i < jsonResult.length(); i++) {
                     j = result.getJSONObject(i);
-                    records.add(i, j.getString("name"));
+                    if (j.getString("name").equals(recipeName)) {
+
+                        ingArray = j.getJSONArray("ingredients");
+                        for (int k = 0; k < ingArray.length(); k++) {
+                            ing = ingArray.getJSONObject(k);
+                            records.add(k, ing.getString("ingredient"));
+                        }
+                    }
                 }
                 //Log.d(TAG, records.toString());
             } catch (JSONException je) {
@@ -112,17 +123,10 @@ public class ListViewWidgetRemoteViewsFactory implements RemoteViewsService.Remo
     @Override
     public RemoteViews getViewAt(int position) {
         //Log.d(TAG, "getViewAt called");
-        RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.widget_item);
+        RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.ingredient_list);
         String data = records.get(position);
-        rv.setTextViewText(R.id.recipe_wname, data);
-        rv.setViewVisibility(R.id.recipe_wname, View.VISIBLE);
-//        Bundle extras = new Bundle();
-//        extras.putInt(RecipeWidgetProvider.EXTRA_ITEM, position);
-//        extras.putString("widget_recipe_name",data);
-//        Intent fillInIntent = new Intent(mContext,RecipeViewIngredientsService.class);
-//        fillInIntent.putExtras(extras);
-//        fillInIntent.setAction(SHOW_INGRED);
-//        rv.setOnClickFillInIntent(R.id.recipe_wname, fillInIntent);
+        rv.setTextViewText(R.id.ingredient_wname, data);
+        rv.setViewVisibility(R.id.ingredient_wname, View.VISIBLE);
         return rv;
     }
 

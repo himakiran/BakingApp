@@ -60,13 +60,21 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
 
     private static RemoteViews showRecipeListRemoteView(Context context, int appWidgetId) {
 
-        Log.d(TAG, "INSIDE show Recipe Grid Remote View");
+        //Log.d(TAG, "INSIDE show Recipe Grid Remote View");
         Intent intent = new Intent(context, ListViewWidgetService.class);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_list);
         views.setRemoteAdapter(appWidgetId, R.id.recipe_List, intent);
         views.setEmptyView(R.id.recipe_List, R.id.empty_view);
+        Intent intent1 = new Intent(context, RecipeWidgetProvider.class);
+        PendingIntent pendingIntent = PendingIntent
+                .getBroadcast(context, 0, intent1,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+        views.setPendingIntentTemplate(R.id.recipe_List,
+                pendingIntent);
+
+
         return views;
     }
 
@@ -108,14 +116,18 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+
         AppWidgetManager mgr = AppWidgetManager.getInstance(context);
         if (intent.getAction().equals(SHOW_INGRED)) {
+            Log.d(TAG, "RECEIVED INTENT");
             int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                     AppWidgetManager.INVALID_APPWIDGET_ID);
             int viewIndex = intent.getIntExtra(EXTRA_ITEM, 0);
             String recipe_name = intent.getStringExtra("widget_recipe_name");
-            Toast.makeText(context, "Touched view " + recipe_name + "@ pos : " + viewIndex, Toast.LENGTH_SHORT).show();
+            Toast toast = new Toast(context);
+            toast.makeText(context, "Touched view " + recipe_name + "@ pos : " + viewIndex, Toast.LENGTH_LONG).show();
         }
         super.onReceive(context, intent);
+
     }
 }
