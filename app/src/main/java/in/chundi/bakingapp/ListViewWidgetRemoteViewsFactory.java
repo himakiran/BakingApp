@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
@@ -15,6 +16,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import static in.chundi.bakingapp.RecipeWidgetProvider.SHOW_INGRED;
 
 /**
  * Created by userhk on 14/07/17.
@@ -86,7 +89,7 @@ public class ListViewWidgetRemoteViewsFactory implements RemoteViewsService.Remo
                     j = result.getJSONObject(i);
                     records.add(i, j.getString("name"));
                 }
-                //Log.d(TAG, records.toString());
+                Log.d(TAG, records.toString());
             } catch (JSONException je) {
                 Log.d(TAG, je.toString());
             }
@@ -116,13 +119,13 @@ public class ListViewWidgetRemoteViewsFactory implements RemoteViewsService.Remo
         String data = records.get(position);
         rv.setTextViewText(R.id.recipe_wname, data);
         rv.setViewVisibility(R.id.recipe_wname, View.VISIBLE);
-//        Bundle extras = new Bundle();
-//        extras.putInt(RecipeWidgetProvider.EXTRA_ITEM, position);
-//        extras.putString("widget_recipe_name",data);
-//        Intent fillInIntent = new Intent(mContext,RecipeViewIngredientsService.class);
-//        fillInIntent.putExtras(extras);
-//        fillInIntent.setAction(SHOW_INGRED);
-//        rv.setOnClickFillInIntent(R.id.recipe_wname, fillInIntent);
+        Bundle extras = new Bundle();
+        extras.putInt(RecipeWidgetProvider.EXTRA_ITEM, position);
+        extras.putString("widget_recipe_name", data);
+        Intent fillInIntent = new Intent(mContext, RecipeViewIngredientsService.class);
+        fillInIntent.putExtras(extras);
+        fillInIntent.setAction(SHOW_INGRED);
+        rv.setOnClickFillInIntent(R.id.recipe_wname, fillInIntent);
         return rv;
     }
 

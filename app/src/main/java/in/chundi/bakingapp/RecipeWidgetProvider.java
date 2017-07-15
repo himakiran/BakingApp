@@ -46,7 +46,6 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
         }
 
 
-
     }
 
     private static RemoteViews showSimpleIconRemoteView(Context context) {
@@ -68,7 +67,10 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
         views.setRemoteAdapter(appWidgetId, R.id.recipe_List, intent);
         views.setEmptyView(R.id.recipe_List, R.id.empty_view);
         Intent intent1 = new Intent(context, RecipeWidgetProvider.class);
-        PendingIntent pendingIntent = PendingIntent
+        intent1.setAction(SHOW_INGRED);
+        intent1.setData(Uri.parse(intent1
+                .toUri(Intent.URI_INTENT_SCHEME)));
+        final PendingIntent pendingIntent = PendingIntent
                 .getBroadcast(context, 0, intent1,
                         PendingIntent.FLAG_UPDATE_CURRENT);
         views.setPendingIntentTemplate(R.id.recipe_List,
@@ -131,3 +133,4 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
 
     }
 }
+
