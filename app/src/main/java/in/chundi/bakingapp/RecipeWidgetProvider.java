@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 /**
  * Created by userhk on 12/07/17.
@@ -22,23 +21,25 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
     public static final String EXTRA_ITEM = "in.chundi.bakingapp.EXTRA_ITEM";
     public static final String SHOW_INGRED = "in.chundi.bakingapp.SHOW_INGRED";
     public static String TAG = RecipeWidgetProvider.class.getSimpleName();
+    private static AppWidgetManager mgr;
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
         // Get current width to decide on single icon vs recipe grid view
+        mgr = appWidgetManager;
         Bundle options = appWidgetManager.getAppWidgetOptions(appWidgetId);
         int width = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
         RemoteViews rv;
-        if (width < 120) {
-            //Log.d(TAG, "WIDTH IS : " + width);
+        if (width < 100) {
+            Log.d(TAG, "WIDTH IS : " + width);
             rv = showSimpleIconRemoteView(context);
             appWidgetManager.updateAppWidget(appWidgetId, rv);
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.recipe_List);
 
         } else {
-            //Log.d(TAG, "WIDTH IS : " + width);
-            //Log.d(TAG, "Show Recipe List Remote View");
+            Log.d(TAG, "WIDTH IS : " + width);
+            Log.d(TAG, "Show Recipe List Remote View");
             rv = showRecipeListRemoteView(context, appWidgetId);
             appWidgetManager.updateAppWidget(appWidgetId, rv);
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.recipe_List);
@@ -59,7 +60,7 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
 
     private static RemoteViews showRecipeListRemoteView(Context context, int appWidgetId) {
 
-        //Log.d(TAG, "INSIDE show Recipe Grid Remote View");
+        Log.d(TAG, "INSIDE show Recipe List Remote View");
         Intent intent = new Intent(context, ListViewWidgetService.class);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
@@ -67,7 +68,6 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
         views.setRemoteAdapter(appWidgetId, R.id.recipe_List, intent);
         views.setEmptyView(R.id.recipe_List, R.id.empty_view);
         Intent intent1 = new Intent(context, RecipeWidgetProvider.class);
-        intent1.setAction(SHOW_INGRED);
         intent1.setData(Uri.parse(intent1
                 .toUri(Intent.URI_INTENT_SCHEME)));
         final PendingIntent pendingIntent = PendingIntent
@@ -83,10 +83,12 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 
+        super.onUpdate(context, appWidgetManager, appWidgetIds);
+
         for (int a = 0; a < appWidgetIds.length; a++) {
             updateAppWidget(context, appWidgetManager, appWidgetIds[a]);
         }
-        super.onUpdate(context, appWidgetManager, appWidgetIds);
+
 
     }
 
@@ -116,20 +118,37 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
 
     }
 
+    //    private RemoteViews updateWidgetListView(Context context, int appWidgetId, String recipeName) {
+//
+//        Log.d(TAG, "inside updtWdgtLstView");
+//        // which layout to show on widget
+//        RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
+//                R.layout.widget_list);
+//        //context.startService(svcIntent);
+//        return remoteViews;
+//    }
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        AppWidgetManager mgr = AppWidgetManager.getInstance(context);
+        super.onReceive(context, intent);
+
         if (intent.getAction().equals(SHOW_INGRED)) {
             Log.d(TAG, "RECEIVED INTENT");
-            int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
-                    AppWidgetManager.INVALID_APPWIDGET_ID);
-            int viewIndex = intent.getIntExtra(EXTRA_ITEM, 0);
-            String recipe_name = intent.getStringExtra("widget_recipe_name");
-            Toast toast = new Toast(context);
-            toast.makeText(context, "Touched view " + recipe_name + "@ pos : " + viewIndex, Toast.LENGTH_LONG).show();
+            int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+            String recipeName = intent.getStringExtra("widget_recipe_name");
+            Log.d(TAG, "appWIDGETid is " + appWidgetId);
+            Log.d(TAG, " Recipe name is " + recipeName);
+            RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.ingredient_list);
+            Intent svcIntent = new Intent(context, RecipeViewIngredientsService.class);
+            svcIntent.putExtra("widget_recipe_name", recipeName);
+            svcIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+            svcIntent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+            rv.setRemoteAdapter(R.id.ingredient_List, svcIntent);
+            rv.setEmptyView(R.id.ingredient_List, R.id.empty_ing_view);
+            AppWidgetManager.getInstance(context).updateAppWidget(appWidgetId, rv);
+
         }
-        super.onReceive(context, intent);
+
 
     }
 }

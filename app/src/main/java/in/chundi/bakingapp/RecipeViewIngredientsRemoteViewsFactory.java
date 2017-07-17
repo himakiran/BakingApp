@@ -38,13 +38,14 @@ public class RecipeViewIngredientsRemoteViewsFactory implements RemoteViewsServi
         mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                 AppWidgetManager.INVALID_APPWIDGET_ID);
         mIntent = intent;
+        Log.d(TAG, "Constructor fired");
         recipeName = intent.getStringExtra("widget_recipe_name");
 
     }
 
     @Override
     public void onCreate() {
-        //Log.d(TAG, "INSIDE " + "OnCreate");
+        Log.d(TAG, "INSIDE " + "OnCreate");
 
         jsonUrlString = mContext.getString(R.string.json_url);
 
@@ -63,7 +64,7 @@ public class RecipeViewIngredientsRemoteViewsFactory implements RemoteViewsServi
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
         if (isConnected) {
-            //Log.d(TAG, "Internet available");
+            Log.d(TAG, "Internet available");
             ba.execute(jsonUrlString);
         } else {
             Log.d(TAG, "No internet connectivity");
@@ -93,6 +94,7 @@ public class RecipeViewIngredientsRemoteViewsFactory implements RemoteViewsServi
                         ingArray = j.getJSONArray("ingredients");
                         for (int k = 0; k < ingArray.length(); k++) {
                             ing = ingArray.getJSONObject(k);
+                            Log.d(TAG, ing.getString("ingredient"));
                             records.add(k, ing.getString("ingredient"));
                         }
                     }
@@ -122,11 +124,12 @@ public class RecipeViewIngredientsRemoteViewsFactory implements RemoteViewsServi
 
     @Override
     public RemoteViews getViewAt(int position) {
-        //Log.d(TAG, "getViewAt called");
-        RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.ingredient_list);
+        Log.d(TAG, "getViewAt called");
+        RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.ingredient_item);
         String data = records.get(position);
         rv.setTextViewText(R.id.ingredient_wname, data);
         rv.setViewVisibility(R.id.ingredient_wname, View.VISIBLE);
+        rv.setViewVisibility(R.id.empty_ing_view, View.INVISIBLE);
         return rv;
     }
 

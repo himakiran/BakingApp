@@ -13,13 +13,21 @@
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.appwidget.action.SHOW_INGRED" />
-            </intent-filter>
+            <!--<intent-filter>-->
+            <!--<action android:name="android.appwidget.action.SHOW_INGRED" />-->
+            <!--</intent-filter>-->
+
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/recipe_widget_info" />
         </receiver>
+
+        <service
+            android:name=".RecipeViewIngredientsService"
+            android:permission="android.permission.BIND_REMOTEVIEWS">
+
+        </service>
+
         <service
             android:name=".ListViewWidgetService"
 
