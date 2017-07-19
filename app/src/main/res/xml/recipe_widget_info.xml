@@ -14,10 +14,12 @@
     limitations under the License.
 -->
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:initialLayout="@layout/recipe_widget"
     android:minHeight="40dp"
     android:minWidth="40dp"
     android:previewImage="@drawable/welcome"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="86400000"
-    android:widgetCategory="home_screen" />
+    android:widgetCategory="home_screen"
+    tools:targetApi="jelly_bean_mr1" />

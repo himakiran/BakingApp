@@ -57,11 +57,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorAccent"
-            android:onClick="showSteps"
             android:text="RECIPE STEPS"
             android:textAlignment="center"
             android:textAllCaps="false"
             android:textSize="45sp">
+            <!--android:onClick="showSteps"-->
 
         </Button>
 
