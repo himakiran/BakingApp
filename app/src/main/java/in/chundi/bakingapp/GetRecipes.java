@@ -48,8 +48,8 @@ public class GetRecipes {
                 r.setRecipeId(j.getInt(context.getString(R.string.id)));
                 r.setRecipeName(j.getString(context.getString(R.string.name)));
                 r.setRecipeIngredients(j.getJSONArray(context.getString(R.string.Ingredient)));
-                r.setRecipeNoOfSteps(j.getJSONArray(context.getString(R.string.STEPS)).length());
-                r.setRecipeSteps(j.getJSONArray(context.getString(R.string.STEPS)));
+                r.setRecipeNoOfSteps(j.getJSONArray(context.getString(R.string.steps)).length());
+                r.setRecipeSteps(j.getJSONArray(context.getString(R.string.steps)));
                 r.setRecipeImg(j.getString(context.getString(R.string.Img)));
                 recipeArrayList.add(i, r);
                 r = null;

@@ -3,6 +3,7 @@
     <string name="json_url">https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json</string>
     <string name="WelcomeMessage">Welcome to Baking nirvana</string>
     <string name="STEPS">Steps</string>
+    <string name="steps">steps</string>
     <string name="id">id</string>
     <string name="name">name</string>
     <string name="Ingredient">ingredients</string>
