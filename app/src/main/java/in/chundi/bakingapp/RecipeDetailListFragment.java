@@ -67,10 +67,10 @@ public class RecipeDetailListFragment extends Fragment {
             j = new JSONObject(jsonString);
             // Get a reference to all the views in the rootView
             textView = (TextView) rootView.findViewById(recipe_title);
-            textView.setText(j.getString("name"));
+            textView.setText(j.getString(getString(R.string.name)));
             //Log.d(TAG, textView.getText().toString());
             Button b = (Button) rootView.findViewById(recipe_steps);
-            b.setText("Steps");
+            b.setText(getString(R.string.STEPS));
             b.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     try {
@@ -95,7 +95,7 @@ public class RecipeDetailListFragment extends Fragment {
             });
             //Log.d(TAG, b.getText().toString());
             textView = (TextView) rootView.findViewById(recipe_servings);
-            textView.setText("No of Servings:" + j.getString("servings"));
+            textView.setText(getString(R.string.NumOfServings) + j.getString("servings"));
             //Log.d(TAG, textView.getText().toString());
 
             // Get the content of listDataHeader and listDatachild from the json object
@@ -113,8 +113,8 @@ public class RecipeDetailListFragment extends Fragment {
                 // measure and ingredient
                 temp = ingredientsJsonArray.getJSONObject(i);
 
-                childList.add(0, "Quantity : " + temp.getString("quantity"));
-                childList.add(1, "Measure  : " + temp.getString("measure"));
+                childList.add(0, getString(R.string.Qty) + temp.getString("quantity"));
+                childList.add(1, getString(R.string.Msr) + temp.getString("measure"));
 
                 //Log.d(TAG, childList.toString());
                 listDataChild.put(ingredientsJsonArray.getJSONObject(i).getString("ingredient"), childList);

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class GetDescVidThumbnailFromSteps {
     private ArrayList<String> mString;
-    private String TAG = "GetDescVidTSteps";
+    private String TAG = GetDescVidThumbnailFromSteps.class.getSimpleName();
 
     public GetDescVidThumbnailFromSteps(ArrayList<String> s) {
 

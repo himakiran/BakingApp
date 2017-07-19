@@ -18,7 +18,7 @@ import android.widget.RemoteViews;
 
 public class RecipeWidgetProvider extends AppWidgetProvider {
 
-    public static final String EXTRA_ITEM = "in.chundi.bakingapp.EXTRA_ITEM";
+
     public static final String SHOW_INGRED = "in.chundi.bakingapp.SHOW_INGRED";
     public static String TAG = RecipeWidgetProvider.class.getSimpleName();
     private static AppWidgetManager mgr;
@@ -140,7 +140,7 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
             Log.d(TAG, " Recipe name is " + recipeName);
             RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.ingredient_list);
             Intent svcIntent = new Intent(context, RecipeViewIngredientsService.class);
-            svcIntent.putExtra("widget_recipe_name", recipeName);
+            svcIntent.putExtra(context.getString(R.string.wdgtRecpName), recipeName);
             svcIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
             svcIntent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
             rv.setRemoteAdapter(R.id.ingredient_List, svcIntent);

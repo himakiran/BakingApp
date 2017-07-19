@@ -45,12 +45,12 @@ public class GetRecipes {
             for (int i = 0; i < num; i++) {
                 j = ja.getJSONObject(i);
                 r = new Recipe(context);
-                r.setRecipeId(j.getInt("id"));
-                r.setRecipeName(j.getString("name"));
-                r.setRecipeIngredients(j.getJSONArray("ingredients"));
-                r.setRecipeNoOfSteps(j.getJSONArray("steps").length());
-                r.setRecipeSteps(j.getJSONArray("steps"));
-                r.setRecipeImg(j.getString("image"));
+                r.setRecipeId(j.getInt(context.getString(R.string.id)));
+                r.setRecipeName(j.getString(context.getString(R.string.name)));
+                r.setRecipeIngredients(j.getJSONArray(context.getString(R.string.Ingredient)));
+                r.setRecipeNoOfSteps(j.getJSONArray(context.getString(R.string.STEPS)).length());
+                r.setRecipeSteps(j.getJSONArray(context.getString(R.string.STEPS)));
+                r.setRecipeImg(j.getString(context.getString(R.string.Img)));
                 recipeArrayList.add(i, r);
                 r = null;
             }

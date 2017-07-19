@@ -167,7 +167,7 @@ public class ExpandableStepsAdapter extends BaseExpandableListAdapter {
             mExoPlayer = ExoPlayerFactory.newSimpleInstance(mContext, trackSelector, loadControl);
             mPlayerView.setVisibility(View.VISIBLE);
             mPlayerView.setPlayer(mExoPlayer);
-            String useragent = Util.getUserAgent(mContext, "BakingApp");
+            String useragent = Util.getUserAgent(mContext, mContext.getString(R.string.app_name));
 
             MediaSource mediaSource = new ExtractorMediaSource(mediaUri,
                     new DefaultHttpDataSourceFactory(useragent),

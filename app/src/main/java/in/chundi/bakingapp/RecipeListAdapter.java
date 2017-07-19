@@ -102,7 +102,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
             int position = getAdapterPosition(); // gets item position
             if (position != RecyclerView.NO_POSITION) {
 
-                Toast.makeText(context, "Recipe not availabe", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, R.string.RcpNotAvail, Toast.LENGTH_SHORT).show();
             }
         }
     }

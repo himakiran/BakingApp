@@ -39,7 +39,7 @@ public class RecipeViewIngredientsRemoteViewsFactory implements RemoteViewsServi
                 AppWidgetManager.INVALID_APPWIDGET_ID);
         mIntent = intent;
         Log.d(TAG, "Constructor fired");
-        recipeName = intent.getStringExtra("widget_recipe_name");
+        recipeName = intent.getStringExtra(mContext.getString(R.string.wdgtRecpName));
 
     }
 

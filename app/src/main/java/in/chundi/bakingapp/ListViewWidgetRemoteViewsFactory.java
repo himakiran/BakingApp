@@ -24,7 +24,7 @@ import static in.chundi.bakingapp.RecipeWidgetProvider.SHOW_INGRED;
 
 public class ListViewWidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory, AsyncResponse {
 
-    public static final String EXTRA_ITEM = "in.chundi.bakingapp.EXTRA_ITEM";
+
     private Context mContext;
     private ArrayList<String> records;
     private String jsonUrlString;
@@ -86,7 +86,7 @@ public class ListViewWidgetRemoteViewsFactory implements RemoteViewsService.Remo
             try {
                 for (int i = 0; i < jsonResult.length(); i++) {
                     j = result.getJSONObject(i);
-                    records.add(i, j.getString("name"));
+                    records.add(i, j.getString(mContext.getString(R.string.name)));
                 }
                 Log.d(TAG, records.toString());
             } catch (JSONException je) {
@@ -121,7 +121,7 @@ public class ListViewWidgetRemoteViewsFactory implements RemoteViewsService.Remo
         Intent fillInIntent = new Intent(mContext, RecipeViewIngredientsService.class);
         fillInIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                 mAppWidgetId);
-        fillInIntent.putExtra("widget_recipe_name", data);
+        fillInIntent.putExtra(mContext.getString(R.string.wdgtRecpName), data);
         fillInIntent.setAction(SHOW_INGRED);
         rv.setOnClickFillInIntent(R.id.recipe_wname, fillInIntent);
         return rv;

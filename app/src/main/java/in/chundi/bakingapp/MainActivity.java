@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
             ba.execute(getString(R.string.json_url));
         } else {
             Toast t = new Toast(this);
-            t.makeText(this, "No Internet Connection Detected", Toast.LENGTH_LONG).show();
+            t.makeText(this, R.string.NoInternet, Toast.LENGTH_LONG).show();
         }
 
     }
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
 
         } else {
             Log.e(TAG, "No Json received");
-            Toast.makeText(this, "No Recipe received ", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.NoRecpRecv, Toast.LENGTH_LONG).show();
         }
 
         }
