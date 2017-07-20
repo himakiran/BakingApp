@@ -13,5 +13,9 @@
     <string name="NumOfServings">No of Servings:</string>
     <string name="Qty">Quantity :</string>
     <string name="Msr">Measure  :</string>
-    <string name="RcpNotAvail">Recipe not availabe</string>
+    <string name="RcpNotAvail">Recipe not available</string>
+    <string name="recipe_name">RECIPE NAME</string>
+    <string name="recipe_steps">RECIPE STEPS</string>
+    <string name="no_of_servings">No of Servings</string>
+    <string name="ingredients">Ingredients</string>
 </resources>
