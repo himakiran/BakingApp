@@ -40,6 +40,7 @@ public class RecipeMasterListFragment extends Fragment {
     private GetRecipes gr;
     private Boolean mTwoPane;
     private Boolean sidePane;
+    private int scrollPosition;
 
     public RecipeMasterListFragment() {
 
@@ -88,8 +89,24 @@ public class RecipeMasterListFragment extends Fragment {
                 mCurrentLayoutManagerType = (LayoutManagerType) savedInstanceState
                         .getSerializable(KEY_LAYOUT_MANAGER);
             }
+            /*
+            Comments : Required :
+            It is required that you restore the position of the recycler view post rotation.
 
+            Note: I had already implemented for two cases below but forgot to do that here..
+            now done.
+             */
+            scrollPosition = 0;
+            if (mRecyclerView.getLayoutManager() != null) {
+                scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
+                        .getPosition(mRecyclerView);
+
+            }
             setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
+            mRecyclerView.scrollToPosition(scrollPosition);
+
+
+
         } // This fragment called from main activity from tablet layout
         else if (mTwoPane && !sidePane) {
 
@@ -103,7 +120,7 @@ public class RecipeMasterListFragment extends Fragment {
             }
 
 
-            int scrollPosition = 0;
+            scrollPosition = 0;
 
             // If a layout manager has already been set, get current scroll position.
             if (mRecyclerView.getLayoutManager() != null) {
@@ -126,16 +143,16 @@ public class RecipeMasterListFragment extends Fragment {
                 mCurrentLayoutManagerType = (LayoutManagerType) savedInstanceState
                         .getSerializable(KEY_LAYOUT_MANAGER);
             }
-            int scrollPos = 0;
+            scrollPosition = 0;
 
             // If a layout manager has already been set, get current scroll position.
             if (mRecyclerView.getLayoutManager() != null) {
-                scrollPos = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
+                scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
                         .getPosition(mRecyclerView);
             }
 
             setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
-            mRecyclerView.scrollToPosition(scrollPos);
+            mRecyclerView.scrollToPosition(scrollPosition);
 
 
         }
