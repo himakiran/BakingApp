@@ -64,6 +64,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
         TextView textView = holder.listRecipeTextView;
         textView.setText(r.getRecipeName());
 
+
     }
 
     @Override
