@@ -74,9 +74,11 @@ public class ShowStepDetailsFragment extends Fragment {
         final String thumbNaiUrl = gd.getThumbnai();
         Log.i(TAG, thumbNaiUrl);
         ImageView imageView = (ImageView) rootView.findViewById(R.id.thumbnailVideo);
-        if (!(thumbNaiUrl.equals(""))) {
-            Picasso.with(getContext()).load(thumbNaiUrl).fit().into(imageView);
-            imageView.setVisibility(View.VISIBLE);
+        if (imageView != null) {
+            if (!(thumbNaiUrl.equals(""))) {
+                Picasso.with(getContext()).load(thumbNaiUrl).fit().into(imageView);
+                imageView.setVisibility(View.VISIBLE);
+            }
         }
         // Initialize the player view.
         Log.i(TAG, "setting mPlayerView");
