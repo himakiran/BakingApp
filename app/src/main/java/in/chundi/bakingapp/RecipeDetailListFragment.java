@@ -154,6 +154,7 @@ public class RecipeDetailListFragment extends Fragment {
             listAdapter = new RecipeIngredientListAdapter(getContext(), listDataHeader, listDataChild);
             mRecyclerView.setAdapter(listAdapter);
 
+
             if (mTwoPane) {
 
                 // we want to call a new instance of the master list fragment to paint
@@ -207,6 +208,14 @@ public class RecipeDetailListFragment extends Fragment {
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.scrollToPosition(scrollPosition);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save currently selected layout manager.
+        savedInstanceState.putSerializable(KEY_LAYOUT_MANAGER, mCurrentLayoutManagerType);
+        super.onSaveInstanceState(savedInstanceState);
+
     }
 
     private enum LayoutManagerType {

@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -81,30 +80,30 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
         return mContext;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public ImageView imgName;
-        public TextView textTitle;
-        private Context context;
-
-        public ViewHolder(Context context, View itemView) {
-            super(itemView);
-            this.imgName = (ImageView) itemView.findViewById(R.id.recipe_item_image);
-            this.textTitle = (TextView) itemView.findViewById(R.id.recipe_item_title);
-            // Store the context
-            this.context = context;
-            // Attach a click listener to the entire row view
-            itemView.setOnClickListener(this);
-        }
-
-        // Handles the row being being clicked
-        @Override
-        public void onClick(View view) {
-            int position = getAdapterPosition(); // gets item position
-            if (position != RecyclerView.NO_POSITION) {
-
-                Toast.makeText(context, R.string.RcpNotAvail, Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
+//    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+//        public ImageView imgName;
+//        public TextView textTitle;
+//        private Context context;
+//
+//        public ViewHolder(Context context, View itemView) {
+//            super(itemView);
+//            this.imgName = (ImageView) itemView.findViewById(R.id.recipe_item_image);
+//            this.textTitle = (TextView) itemView.findViewById(R.id.recipe_item_title);
+//            // Store the context
+//            this.context = context;
+//            // Attach a click listener to the entire row view
+//            itemView.setOnClickListener(this);
+//        }
+//
+//        // Handles the row being being clicked
+//        @Override
+//        public void onClick(View view) {
+//            int position = getAdapterPosition(); // gets item position
+//            if (position != RecyclerView.NO_POSITION) {
+//
+//                Toast.makeText(context, R.string.RcpNotAvail, Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//    }
 
 }

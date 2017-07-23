@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    android:animateLayoutChanges="true"
     android:background="#000000"
     android:orientation="vertical"
     android:padding="8dp">
@@ -14,5 +15,34 @@
         android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
         android:textColor="#f9f93d"
         android:textSize="@dimen/text_size_sub_heading" />
+
+    <LinearLayout
+        android:id="@+id/llExpandArea"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/childQty"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="1dp"
+            android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"
+            android:paddingTop="1dp"
+            android:textColor="#f9f93d"
+            android:textSize="@dimen/text_size_child_heading" />
+
+        <TextView
+            android:id="@+id/childMeasure"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="1dp"
+            android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"
+            android:paddingTop="1dp"
+            android:textColor="#f9f93d"
+            android:textSize="@dimen/text_size_child_heading" />
+    </LinearLayout>
 
 </LinearLayout>
