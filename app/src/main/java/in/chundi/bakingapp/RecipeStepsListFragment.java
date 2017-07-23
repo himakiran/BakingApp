@@ -2,6 +2,7 @@ package in.chundi.bakingapp;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,7 +16,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by userhk on 03/07/17.
@@ -29,7 +29,7 @@ public class RecipeStepsListFragment extends Fragment {
     StepsListAdapter listAdapter;
     RecyclerView expListView;
     ArrayList<String> listDataHeader;
-    HashMap<String, List<String>> listDataChild;
+    HashMap<String, ArrayList<String>> listDataChild;
     private Bundle bundle;
     private JSONArray j;
     private String TAG = RecipeStepsListFragment.class.getSimpleName();
@@ -83,9 +83,9 @@ public class RecipeStepsListFragment extends Fragment {
             j = new JSONArray(jsonString);
             // Get the content of listDataHeader and listDatachild from the json array
             listDataHeader = new ArrayList<String>();
-            listDataChild = new HashMap<String, List<String>>();
+            listDataChild = new HashMap<String, ArrayList<String>>();
             JSONObject temp;
-            List<String> tempS;
+            ArrayList<String> tempS;
             for (int i = 0; i < j.length(); i++) {
                 temp = j.getJSONObject(i);
                 tempS = new ArrayList<String>();
@@ -104,6 +104,26 @@ public class RecipeStepsListFragment extends Fragment {
             //Log.d(TAG,"LISTDATAHEADER :: " +listDataHeader.toString());
             //Log.d(TAG,"LISTDATACHILD :: " +listDataChild.toString());
             expListView.setAdapter(listAdapter);
+            ItemClickSupport.addTo(mRecyclerView).setOnItemClickListener(
+                    new ItemClickSupport.OnItemClickListener() {
+                        @Override
+                        public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+
+                            Log.d(TAG, "POSITION  IS " + position);
+                            Bundle b = new Bundle();
+                            b.putStringArrayList("stepsLIST", listDataChild.get(listDataHeader.get(position)));
+                            getActivity().setContentView(R.layout.fragment_container);
+                            ShowStepDetailsFragment showStepDetailsFragment = new ShowStepDetailsFragment();
+                            showStepDetailsFragment.setArguments(b);
+                            FragmentManager fg = getActivity().getSupportFragmentManager();
+                            fg.beginTransaction()
+                                    .replace(R.id.fragment_container, showStepDetailsFragment)
+                                    .addToBackStack(null)
+                                    .commit();
+
+
+                        }
+                    });
 
         } catch (JSONException je) {
             Log.d(TAG, je.toString());
@@ -135,6 +155,14 @@ public class RecipeStepsListFragment extends Fragment {
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.scrollToPosition(scrollPosition);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save currently selected layout manager.
+        savedInstanceState.putSerializable(KEY_LAYOUT_MANAGER, mCurrentLayoutManagerType);
+        super.onSaveInstanceState(savedInstanceState);
+
     }
 
     private enum LayoutManagerType {

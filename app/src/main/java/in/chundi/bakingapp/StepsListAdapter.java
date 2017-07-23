@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by userhk on 01/07/17.
@@ -25,11 +24,11 @@ public class StepsListAdapter extends RecyclerView.Adapter<StepsViewHolder> {
 
     private static final String TAG = StepsListAdapter.class.getSimpleName();
     private ArrayList<String> stepsList;
-    private HashMap<String, List<String>> childStepsList;
+    private HashMap<String, ArrayList<String>> childStepsList;
     private Context mContext;
 
 
-    public StepsListAdapter(Context context, ArrayList<String> steps, HashMap<String, List<String>> childSteps) {
+    public StepsListAdapter(Context context, ArrayList<String> steps, HashMap<String, ArrayList<String>> childSteps) {
         mContext = context;
         stepsList = steps;
         childStepsList = childSteps;
