@@ -3,13 +3,13 @@ package in.chundi.bakingapp;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ExpandableListAdapter;
-import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -30,17 +30,21 @@ import static in.chundi.bakingapp.R.id.recipe_title;
  */
 
 public class RecipeDetailListFragment extends Fragment {
+    private static final String KEY_LAYOUT_MANAGER = "layoutManager";
+    protected RecyclerView mRecyclerView;
+    protected LayoutManagerType mCurrentLayoutManagerType;
+    protected RecyclerView.LayoutManager mLayoutManager;
     TextView textView;
-    ExpandableListAdapter listAdapter;
-    ExpandableListView expListView;
-    List<String> listDataHeader;
-    List<String> childList;
+    RecipeIngredientListAdapter listAdapter;
+    ArrayList<String> listDataHeader;
+    ArrayList<String> childList;
     HashMap<String, List<String>> listDataChild;
     private Bundle bundle;
     private JSONObject j;
     private String TAG = RecipeDetailListFragment.class.getSimpleName();
     private Boolean mTwoPane;
     private Boolean sidePane;
+    private int scrollPosition;
     public RecipeDetailListFragment() {
 
     }
@@ -60,7 +64,7 @@ public class RecipeDetailListFragment extends Fragment {
 
 
         final View rootView = inflater.inflate(R.layout.fragment_recipe_detail_list_item, container, false);
-
+        rootView.setTag(TAG);
 
         try {
 
@@ -120,9 +124,35 @@ public class RecipeDetailListFragment extends Fragment {
                 listDataChild.put(ingredientsJsonArray.getJSONObject(i).getString("ingredient"), childList);
                 childList = null;
                 }
-            expListView = (ExpandableListView) rootView.findViewById(recipe_ingredients_list);
-            listAdapter = new ExpandableIngredientListAdapter(getContext(), listDataHeader, listDataChild);
-            expListView.setAdapter(listAdapter);
+            mRecyclerView = (RecyclerView) rootView.findViewById(recipe_ingredients_list);
+
+            // Here we r displaying the recycler view in a linear layout fashion
+            mLayoutManager = new LinearLayoutManager(getActivity());
+            mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
+
+            if (savedInstanceState != null) {
+                // Restore saved layout manager type.
+                mCurrentLayoutManagerType = (LayoutManagerType) savedInstanceState
+                        .getSerializable(KEY_LAYOUT_MANAGER);
+            }
+            /*
+            Comments : Required :
+            It is required that you restore the position of the recycler view post rotation.
+
+            Note: I had already implemented for two cases below but forgot to do that here..
+            now done.
+             */
+            scrollPosition = 0;
+            if (mRecyclerView.getLayoutManager() != null) {
+                scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
+                        .getPosition(mRecyclerView);
+
+            }
+            setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
+            mRecyclerView.scrollToPosition(scrollPosition);
+
+            listAdapter = new RecipeIngredientListAdapter(getContext(), listDataHeader, listDataChild);
+            mRecyclerView.setAdapter(listAdapter);
 
             if (mTwoPane) {
 
@@ -156,5 +186,32 @@ public class RecipeDetailListFragment extends Fragment {
 
     }
 
+    /**
+     * Set RecyclerView's LayoutManager to the one given.
+     *
+     * @param layoutManagerType Type of layout manager to switch to.
+     */
+    public void setRecyclerViewLayoutManager(LayoutManagerType layoutManagerType) {
+        int scrollPosition = 0;
+
+        // If a layout manager has already been set, get current scroll position.
+        if (mRecyclerView.getLayoutManager() != null) {
+            scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
+                    .findFirstCompletelyVisibleItemPosition();
+        }
+
+
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
+
+
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.scrollToPosition(scrollPosition);
+    }
+
+    private enum LayoutManagerType {
+        GRID_LAYOUT_MANAGER,
+        LINEAR_LAYOUT_MANAGER
+    }
 
 }
