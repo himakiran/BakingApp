@@ -2,7 +2,6 @@ package in.chundi.bakingapp;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,7 +86,7 @@ public class RecipeIngredientListAdapter extends RecyclerView.Adapter<Ingredient
     @Override
     public void onClick(View view) {
 
-        Log.d(TAG, "CLICKED");
+        //Log.d(TAG, "CLICKED");
         IngredientViewHolder holder = (IngredientViewHolder) view.getTag();
         // Check for an expanded view, collapse if you find one
         if (expandedPosition >= 0) {
