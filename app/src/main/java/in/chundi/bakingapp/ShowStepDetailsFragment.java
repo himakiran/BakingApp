@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -24,6 +25,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -39,6 +41,7 @@ public class ShowStepDetailsFragment extends Fragment {
     private String TAG = ShowStepDetailsFragment.class.getSimpleName();
     private SimpleExoPlayer mExoPlayer;
     private SimpleExoPlayerView mPlayerView;
+    private Uri mediaUri;
 
 
     public ShowStepDetailsFragment() {
@@ -70,6 +73,11 @@ public class ShowStepDetailsFragment extends Fragment {
         Log.i(TAG, urlText);
         final String thumbNaiUrl = gd.getThumbnai();
         Log.i(TAG, thumbNaiUrl);
+        ImageView imageView = (ImageView) rootView.findViewById(R.id.thumbnailVideo);
+        if (!(thumbNaiUrl.equals(""))) {
+            Picasso.with(getContext()).load(thumbNaiUrl).fit().into(imageView);
+            imageView.setVisibility(View.VISIBLE);
+        }
         // Initialize the player view.
         Log.i(TAG, "setting mPlayerView");
         mPlayerView = (SimpleExoPlayerView) rootView.findViewById(playerView);
@@ -93,8 +101,8 @@ public class ShowStepDetailsFragment extends Fragment {
             //Picasso.with(mContext).load(R.drawable.bakingthumb).into(imageView);
 
             //Log.d(TAG, "URI IS : " + Uri.parse(urlText).toString());
-
-            initializePlayer(Uri.parse(urlText));
+            mediaUri = Uri.parse(urlText);
+            initializePlayer(mediaUri);
         } else {
             Log.d(TAG, "setting No url hence No mPlayerView");
             mPlayerView.setVisibility(View.GONE);
@@ -149,5 +157,37 @@ public class ShowStepDetailsFragment extends Fragment {
         mExoPlayer.stop();
         mExoPlayer.release();
         mExoPlayer = null;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (Util.SDK_INT > 23) {
+            initializePlayer(mediaUri);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if ((Util.SDK_INT <= 23 || mExoPlayer == null)) {
+            initializePlayer(mediaUri);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (Util.SDK_INT <= 23) {
+            releasePlayer();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (Util.SDK_INT > 23) {
+            releasePlayer();
+        }
     }
 }
