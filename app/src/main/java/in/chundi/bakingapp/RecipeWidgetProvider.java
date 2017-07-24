@@ -67,15 +67,19 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_list);
         views.setRemoteAdapter(appWidgetId, R.id.recipe_List, intent);
         views.setEmptyView(R.id.recipe_List, R.id.empty_view);
-        Intent intent1 = new Intent(context, RecipeWidgetProvider.class);
-        intent1.setData(Uri.parse(intent1
-                .toUri(Intent.URI_INTENT_SCHEME)));
-        final PendingIntent pendingIntent = PendingIntent
-                .getBroadcast(context, 0, intent1,
+//        Intent intent1 = new Intent(context, RecipeWidgetProvider.class);
+//        intent1.setData(Uri.parse(intent1
+//                .toUri(Intent.URI_INTENT_SCHEME)));
+//        final PendingIntent pendingIntent = PendingIntent
+//                .getBroadcast(context, 0, intent1,
+//                        PendingIntent.FLAG_UPDATE_CURRENT);
+//        views.setPendingIntentTemplate(R.id.recipe_List,
+//                pendingIntent);
+        Intent clickIntentTemplate = new Intent(context, RecipeWidgetProvider.class);
+        PendingIntent clickPendingIntentTemplate = PendingIntent
+                .getBroadcast(context, 0, clickIntentTemplate,
                         PendingIntent.FLAG_UPDATE_CURRENT);
-        views.setPendingIntentTemplate(R.id.recipe_List,
-                pendingIntent);
-
+        views.setPendingIntentTemplate(R.id.recipe_List, clickPendingIntentTemplate);
 
         return views;
     }

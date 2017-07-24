@@ -97,6 +97,7 @@ public class ListViewWidgetRemoteViewsFactory implements RemoteViewsService.Remo
 
     @Override
     public void onDestroy() {
+        if (records.size() > 0)
         records.clear();
 
     }
@@ -118,12 +119,19 @@ public class ListViewWidgetRemoteViewsFactory implements RemoteViewsService.Remo
         String data = records.get(position);
         rv.setTextViewText(R.id.recipe_wname, data);
         rv.setViewVisibility(R.id.recipe_wname, View.VISIBLE);
+//        Intent fillInIntent = new Intent(mContext, RecipeViewIngredientsService.class);
+//        fillInIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
+//                mAppWidgetId);
+//        fillInIntent.putExtra(mContext.getString(R.string.wdgtRecpName), data);
+//        fillInIntent.setAction(SHOW_INGRED);
+//        rv.setOnClickFillInIntent(R.id.recipe_wname, fillInIntent);
         Intent fillInIntent = new Intent(mContext, RecipeViewIngredientsService.class);
         fillInIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                 mAppWidgetId);
         fillInIntent.putExtra(mContext.getString(R.string.wdgtRecpName), data);
         fillInIntent.setAction(SHOW_INGRED);
-        rv.setOnClickFillInIntent(R.id.recipe_wname, fillInIntent);
+        rv.setOnClickFillInIntent(R.id.widget_item_layout, fillInIntent);
+
         return rv;
     }
 

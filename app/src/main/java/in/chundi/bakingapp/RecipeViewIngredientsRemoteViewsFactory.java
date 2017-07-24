@@ -129,7 +129,7 @@ public class RecipeViewIngredientsRemoteViewsFactory implements RemoteViewsServi
         String data = records.get(position);
         rv.setTextViewText(R.id.ingredient_wname, data);
         rv.setViewVisibility(R.id.ingredient_wname, View.VISIBLE);
-        rv.setViewVisibility(R.id.empty_ing_view, View.INVISIBLE);
+        //rv.setViewVisibility(R.id.empty_ing_view, View.INVISIBLE);
         return rv;
     }
 

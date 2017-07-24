@@ -27,7 +27,7 @@ public class WelcomeButtonMainActivityTest {
     @Test
     public void clickWelcomeButonLoadsRecipes() {
         // check that welcome button exists
-        onView((withId(R.id.button))).check(matches(withText(getInstrumentation().getContext().getString(R.string.WelcomeMessage))));
+        onView((withId(R.id.button))).check(matches(withText(getInstrumentation().getTargetContext().getString(R.string.WelcomeMessage))));
         // clicking the button should launch recycler view of recipes
         onView((withId(R.id.button))).perform(click());
         // check if recycler view is loaded
