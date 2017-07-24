@@ -70,7 +70,7 @@ public class RecipeStepsListFragment extends Fragment {
              */
         scrollPosition = 0;
         if (mRecyclerView.getLayoutManager() != null) {
-            scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
+            scrollPosition = mRecyclerView.getLayoutManager()
                     .getPosition(mRecyclerView);
 
         }

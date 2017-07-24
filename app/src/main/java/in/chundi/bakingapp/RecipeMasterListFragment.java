@@ -98,7 +98,7 @@ public class RecipeMasterListFragment extends Fragment {
              */
             scrollPosition = 0;
             if (mRecyclerView.getLayoutManager() != null) {
-                scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
+                scrollPosition = mRecyclerView.getLayoutManager()
                         .getPosition(mRecyclerView);
 
             }
@@ -124,7 +124,7 @@ public class RecipeMasterListFragment extends Fragment {
 
             // If a layout manager has already been set, get current scroll position.
             if (mRecyclerView.getLayoutManager() != null) {
-                scrollPosition = ((GridLayoutManager) mRecyclerView.getLayoutManager())
+                scrollPosition = mRecyclerView.getLayoutManager()
                         .getPosition(mRecyclerView);
             }
             mLayoutManager = new GridLayoutManager(getActivity(), 3);
@@ -147,7 +147,7 @@ public class RecipeMasterListFragment extends Fragment {
 
             // If a layout manager has already been set, get current scroll position.
             if (mRecyclerView.getLayoutManager() != null) {
-                scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
+                scrollPosition = mRecyclerView.getLayoutManager()
                         .getPosition(mRecyclerView);
             }
 
