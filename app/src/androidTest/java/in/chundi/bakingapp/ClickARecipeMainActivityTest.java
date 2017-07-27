@@ -25,6 +25,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static in.chundi.bakingapp.R.string.WelcomeMessage;
 import static org.hamcrest.Matchers.allOf;
 
 @LargeTest
@@ -59,7 +60,7 @@ public class ClickARecipeMainActivityTest {
 
         // click the welcome button
         ViewInteraction appCompatButton = onView(
-                allOf(withId(R.id.button), withText(getInstrumentation().getTargetContext().getString(R.string.WelcomeMessage)),
+                allOf(withId(R.id.button), withText(getInstrumentation().getTargetContext().getString(WelcomeMessage)),
                         withParent(allOf(withId(R.id.android_me_linear_layout),
                                 withParent(withId(android.R.id.content)))),
                         isDisplayed()));

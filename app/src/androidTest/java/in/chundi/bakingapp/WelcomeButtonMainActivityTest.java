@@ -14,6 +14,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static in.chundi.bakingapp.R.string.WelcomeMessage;
 
 /**
  * Created by userhk on 19/07/17.
@@ -27,7 +28,7 @@ public class WelcomeButtonMainActivityTest {
     @Test
     public void clickWelcomeButonLoadsRecipes() {
         // check that welcome button exists
-        onView((withId(R.id.button))).check(matches(withText(getInstrumentation().getTargetContext().getString(R.string.WelcomeMessage))));
+        onView((withId(R.id.button))).check(matches(withText(getInstrumentation().getTargetContext().getString(WelcomeMessage))));
         // clicking the button should launch recycler view of recipes
         onView((withId(R.id.button))).perform(click());
         // check if recycler view is loaded
