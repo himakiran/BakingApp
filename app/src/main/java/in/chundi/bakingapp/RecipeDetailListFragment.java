@@ -49,6 +49,13 @@ public class RecipeDetailListFragment extends Fragment {
 
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // retain this fragment
+        setRetainInstance(true);
+    }
+
     // Inflates the details layout of all Recipe images
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

@@ -1,7 +1,6 @@
 package in.chundi.bakingapp;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -21,7 +20,7 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
     int no_of_recipes;
     BakingRecipeAsynctask ba;
     Bundle b;
-    Bundle sa;
+
     RecipeMasterListFragment recipeListFragment;
     private boolean mTwoPane = false;
 
@@ -31,18 +30,18 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
 
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        if (findViewById(R.id.recipe_Grid) != null)
-            mTwoPane = true;
-        if (mTwoPane) {
-            View v = findViewById(R.id.recipe_Grid);
-            showBakeRecipes(v);
-        }
+        if (savedInstanceState == null) {
 
+            setContentView(R.layout.activity_main);
 
-
-
-
+            if (findViewById(R.id.recipe_Grid) != null)
+                mTwoPane = true;
+            if (mTwoPane) {
+                View v = findViewById(R.id.recipe_Grid);
+                showBakeRecipes(v);
+            }
+        } else
+            setContentView(R.layout.fragment_container);
     }
 
     /**
@@ -101,9 +100,16 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
 
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
+    protected void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
 
+
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Log.v(TAG, "Inside of onRestoreInstanceState");
 
     }
 

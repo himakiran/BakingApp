@@ -42,7 +42,7 @@ public class ListViewWidgetRemoteViewsFactory implements RemoteViewsService.Remo
 
     @Override
     public void onCreate() {
-        Log.d(TAG, "INSIDE " + "OnCreate");
+        // Log.d(TAG, "INSIDE " + "OnCreate");
 
 //        jsonUrlString = mContext.getString(R.string.json_url);
 //

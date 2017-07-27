@@ -38,6 +38,13 @@ public class RecipeStepsListFragment extends Fragment {
 
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // retain this fragment
+        setRetainInstance(true);
+    }
+
     // Inflates the details layout of all Recipe steps
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

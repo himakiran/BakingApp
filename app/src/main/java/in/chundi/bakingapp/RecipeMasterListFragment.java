@@ -41,12 +41,28 @@ public class RecipeMasterListFragment extends Fragment {
     private Boolean mTwoPane;
     private Boolean sidePane;
     private int scrollPosition;
+    private View rootView;
+
 
     public RecipeMasterListFragment() {
 
 
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // retain this fragment
+        setRetainInstance(true);
+    }
+
+    //    public void setData(View view) {
+//        this.rootView = view;
+//    }
+//
+//    public View getData() {
+//        return rootView;
+//    }
     // Inflates the GridView of all Recipe images
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -66,7 +82,8 @@ public class RecipeMasterListFragment extends Fragment {
         gr = new GetRecipes(this.getContext(), j);
         ArrayList<Recipe> arrayList = gr.getRecipeArrayList();
 
-        View rootView = inflater.inflate(fragment_recipe_master_list, container, false);
+        rootView = inflater.inflate(fragment_recipe_master_list, container, false);
+
         // This fragment is called from main activity from a phone layout.
         if (!mTwoPane && !sidePane) {
 
