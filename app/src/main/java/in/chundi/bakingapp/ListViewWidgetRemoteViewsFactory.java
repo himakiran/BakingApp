@@ -37,7 +37,7 @@ public class ListViewWidgetRemoteViewsFactory implements RemoteViewsService.Remo
         mIntent = intent;
         records = intent.getStringArrayListExtra("RECORDS");
 
-        Log.d(TAG, "Records received " + records.toString());
+        //Log.d(TAG, "Records received " + records.toString());
     }
 
     @Override
