@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,6 +77,7 @@ public class ShowStepDetailsFragment extends Fragment {
         currentStep = bundle.getInt("currentPos");
         listDataChild = (HashMap<String, ArrayList<String>>) bundle.getSerializable("hashMap");
         listDataHeader = bundle.getStringArrayList("dataHeader");
+
         return getRootView(inflater, container, childSteps);
 
     }
@@ -85,6 +87,18 @@ public class ShowStepDetailsFragment extends Fragment {
         childSteps = listDataChild.get(listDataHeader.get(currentStep));
         View newRootView;
         newRootView = getRootView(inflater, container, childSteps);
+        // disabling the back button
+        newRootView.setFocusableInTouchMode(true);
+        newRootView.requestFocus();
+        newRootView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    return true;
+                }
+                return false;
+            }
+        });
         getActivity().setContentView(newRootView);
 
     }
@@ -187,6 +201,7 @@ public class ShowStepDetailsFragment extends Fragment {
             }
         });
 
+
         return rootView;
 
     }
@@ -206,16 +221,7 @@ public class ShowStepDetailsFragment extends Fragment {
     }
 
 
-    public void onBackPressed() {
 
-        if (currentStep == 0)
-            getActivity().onBackPressed();
-        else {
-            // Do nothing
-        }
-
-
-    }
     /**
      * +     * Initialize ExoPlayer.
      * +     * @param mediaUri The URI of the sample to play.
