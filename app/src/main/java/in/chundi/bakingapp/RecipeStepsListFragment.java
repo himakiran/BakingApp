@@ -119,15 +119,19 @@ public class RecipeStepsListFragment extends Fragment {
                             Log.d(TAG, "POSITION  IS " + position);
                             Bundle b = new Bundle();
                             b.putStringArrayList("stepsLIST", listDataChild.get(listDataHeader.get(position)));
+                            b.putInt("NoOfSteps", listDataHeader.size());
+                            b.putInt("currentPos", position);
+                            b.putSerializable("hashMap", listDataChild);
+                            b.putStringArrayList("dataHeader", listDataHeader);
                             getActivity().setContentView(R.layout.fragment_container);
                             ShowStepDetailsFragment showStepDetailsFragment = new ShowStepDetailsFragment();
                             showStepDetailsFragment.setArguments(b);
                             FragmentManager fg = getActivity().getSupportFragmentManager();
                             fg.beginTransaction()
                                     .replace(R.id.fragment_container, showStepDetailsFragment)
-                                    .addToBackStack(null)
+                                    .addToBackStack(TAG)
                                     .commit();
-
+                            Log.d("BackStack Entry is ", "" + getActivity().getSupportFragmentManager().getBackStackEntryCount());
 
                         }
                     });

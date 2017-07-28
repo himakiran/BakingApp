@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,6 +29,7 @@ import com.google.android.exoplayer2.util.Util;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static in.chundi.bakingapp.R.id.playerView;
 
@@ -36,12 +38,18 @@ import static in.chundi.bakingapp.R.id.playerView;
  */
 
 public class ShowStepDetailsFragment extends Fragment {
-    ArrayList<String> childSteps;
+
+    Button nextBtn, prevBtn;
+    private ArrayList<String> childSteps;
     private Bundle bundle;
     private String TAG = ShowStepDetailsFragment.class.getSimpleName();
     private SimpleExoPlayer mExoPlayer;
     private SimpleExoPlayerView mPlayerView;
     private Uri mediaUri;
+    private int TotalSteps;
+    private int currentStep;
+    private HashMap<String, ArrayList<String>> listDataChild;
+    private ArrayList<String> listDataHeader;
 
 
     public ShowStepDetailsFragment() {
@@ -49,13 +57,41 @@ public class ShowStepDetailsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // retain this fragment
+        setRetainInstance(true);
+    }
+
+
+
+    @Override
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
 
 
         bundle = getArguments();
         childSteps = bundle.getStringArrayList("stepsLIST");
+        TotalSteps = bundle.getInt("NoOfSteps");
+        currentStep = bundle.getInt("currentPos");
+        listDataChild = (HashMap<String, ArrayList<String>>) bundle.getSerializable("hashMap");
+        listDataHeader = bundle.getStringArrayList("dataHeader");
+        return getRootView(inflater, container, childSteps);
 
+    }
+
+
+    private void refreshView(LayoutInflater inflater, ViewGroup container, int currentStep) {
+        childSteps = listDataChild.get(listDataHeader.get(currentStep));
+        View newRootView;
+        newRootView = getRootView(inflater, container, childSteps);
+        getActivity().setContentView(newRootView);
+
+    }
+
+    private View getRootView(final LayoutInflater inflater, final ViewGroup container, ArrayList<String> childSteps) {
+
+        this.childSteps = childSteps;
         final View rootView = inflater.inflate(R.layout.fragment_recipe_steps_list_child_items, container, false);
         rootView.setTag(TAG);
 
@@ -110,10 +146,76 @@ public class ShowStepDetailsFragment extends Fragment {
             mPlayerView.setVisibility(View.GONE);
         }
 
+        nextBtn = (Button) rootView.findViewById(R.id.nextBtn);
+        prevBtn = (Button) rootView.findViewById(R.id.prevBtn);
+
+        TotalSteps = listDataHeader.size();
+        Log.d(TAG, "Total steps are " + TotalSteps);
+
+        Log.d(TAG, " Current step is " + currentStep);
+        toggleButtons();
+        listDataChild = (HashMap<String, ArrayList<String>>) bundle.getSerializable("hashMap");
+        listDataHeader = bundle.getStringArrayList("dataHeader");
+
+        nextBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                currentStep += 1;
+                // enableDisableButtons();
+                if (mExoPlayer != null)
+                    releasePlayer();
+                toggleButtons();
+                Log.d("next btn bkstck ", "" + getActivity().getSupportFragmentManager().getBackStackEntryCount());
+                if (currentStep != TotalSteps)
+                    refreshView(inflater, container, currentStep);
+
+
+            }
+        });
+        prevBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (currentStep != 0)
+                    currentStep -= 1;
+                if (mExoPlayer != null)
+                    releasePlayer();
+                toggleButtons();
+                refreshView(inflater, container, currentStep);
+
+
+            }
+        });
+
         return rootView;
 
     }
 
+    private void toggleButtons() {
+        if (currentStep == (TotalSteps - 1)) {
+            nextBtn.setEnabled(false);
+            prevBtn.setEnabled(true);
+        } else if (currentStep == 0) {
+            prevBtn.setEnabled(false);
+            nextBtn.setEnabled(true);
+        } else if (currentStep >= 1 && currentStep <= TotalSteps) {
+            nextBtn.setEnabled(true);
+            prevBtn.setEnabled(true);
+        }
+
+    }
+
+
+    public void onBackPressed() {
+
+        if (currentStep == 0)
+            getActivity().onBackPressed();
+        else {
+            // Do nothing
+        }
+
+
+    }
     /**
      * +     * Initialize ExoPlayer.
      * +     * @param mediaUri The URI of the sample to play.
@@ -156,9 +258,11 @@ public class ShowStepDetailsFragment extends Fragment {
      * +
      */
     private void releasePlayer() {
-        mExoPlayer.stop();
-        mExoPlayer.release();
-        mExoPlayer = null;
+        if (mExoPlayer != null) {
+            mExoPlayer.stop();
+            mExoPlayer.release();
+            mExoPlayer = null;
+        }
     }
 
     @Override
@@ -192,4 +296,6 @@ public class ShowStepDetailsFragment extends Fragment {
             releasePlayer();
         }
     }
+
+
 }

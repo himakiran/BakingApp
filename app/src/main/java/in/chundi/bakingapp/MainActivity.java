@@ -115,9 +115,9 @@ public class MainActivity extends AppCompatActivity implements AsyncResponse {
 
     @Override
     public void onBackPressed() {
-        if (getFragmentManager().getBackStackEntryCount() > 0) {
-            Log.d(TAG, "back pressed if");
-            getFragmentManager().popBackStack();
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            Log.d(TAG, "back pressed  and entry count is " + getSupportFragmentManager().getBackStackEntryCount());
+            getSupportFragmentManager().popBackStack();
         } else {
             Log.d(TAG, "Back pressed else");
             super.onBackPressed();

@@ -96,9 +96,9 @@ public class RecipeDetailListFragment extends Fragment {
                         FragmentManager fg = getActivity().getSupportFragmentManager();
                         fg.beginTransaction()
                                 .replace(R.id.fragment_container, recipeStepsListFragment)
-                                .addToBackStack(null)
+                                .addToBackStack(TAG)
                                 .commit();
-
+                        Log.d("BackStack Entry is ", "" + getActivity().getSupportFragmentManager().getBackStackEntryCount());
                     } catch (JSONException je) {
                         Log.d(TAG, je.toString());
                     }

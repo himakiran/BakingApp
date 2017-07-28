@@ -204,9 +204,9 @@ public class RecipeMasterListFragment extends Fragment {
                             FragmentManager fg = getActivity().getSupportFragmentManager();
                             fg.beginTransaction()
                                     .replace(R.id.fragment_container, recipeDetailListFragment)
-                                    .addToBackStack(null)
+                                    .addToBackStack(TAG)
                                     .commit();
-
+                            Log.d("BackStack Entry is ", "" + getActivity().getSupportFragmentManager().getBackStackEntryCount());
                         } catch (JSONException je) {
                             Log.d(TAG, je.toString());
                         }
