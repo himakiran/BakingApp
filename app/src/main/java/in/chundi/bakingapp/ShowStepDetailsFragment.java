@@ -88,6 +88,7 @@ public class ShowStepDetailsFragment extends Fragment {
         View newRootView;
         newRootView = getRootView(inflater, container, childSteps);
         // disabling the back button
+        // user uses prev and next button to navigate steps instead of back button
         newRootView.setFocusableInTouchMode(true);
         newRootView.requestFocus();
         newRootView.setOnKeyListener(new View.OnKeyListener() {
